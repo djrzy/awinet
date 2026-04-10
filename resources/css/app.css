@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +6,41 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+    --font-default: "Roboto";
+}
+
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    header {
+        @apply bg-white w-full h-12 flex items-center justify-between px-6;
+    }
+
+    aside {
+        @apply hidden lg:block bg-[#007E41] min-w-60 min-h-screen pt-4 text-white;
+    }
+
+    aside ul li .sidebar-menu {
+        @apply w-full text-sm flex items-center justify-between py-1 pl-4 pr-2 hover:bg-[#F14F10] hover:text-white cursor-pointer;
+    }
+
+    .active {
+        @apply text-white bg-[#F14F10];
+    }
+
+    main {
+        @apply flex-1 overflow-y-auto flex flex-col bg-gray-100 h-full;
+    }
+
+    footer {
+        @apply sticky bottom-12 bg-[#F14F10];
+    }
 }
