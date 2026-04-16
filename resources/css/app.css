@@ -21,11 +21,21 @@
 
 @layer components {
     header {
-        @apply bg-white w-full h-12 flex items-center justify-between px-6;
+        @apply bg-white w-full h-12 flex items-center justify-between px-6 shadow-sm sticky top-0 z-30;
     }
 
+    /* aside {
+        @apply lg:block bg-[#007E41] w-60 min-h-full overflow-y-auto mb-32 pt-4 text-white;
+    } */
+
     aside {
-        @apply hidden lg:block bg-[#007E41] min-w-60 min-h-full overflow-y-auto mb-32 pt-4 text-white;
+        @apply fixed lg:relative
+           top-12 lg:top-0 left-0
+           min-h-full
+           bg-[#007E41] text-white
+           overflow-y-auto pt-4 mb-32
+           transition-all duration-300
+           z-20;
     }
 
     aside ul li .sidebar-menu {
@@ -41,6 +51,10 @@
     }
 
     footer {
-        @apply flex-1 sticky bottom-12 bg-[#F14F10];
+        @apply flex-1 pl-2 fixed w-full bottom-0 bg-[#F14F10];
     }
+
+    /* footer {
+        @apply flex-1 sticky bottom-12 bg-[#F14F10];
+    } */
 }

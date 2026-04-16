@@ -1,4 +1,4 @@
-<aside>
+<aside :class="sidebarOpen ? 'w-60' : 'w-0'" x-cloak>
     <ul class="flex flex-col pb-16">
         <li>
             <a href="#" class="sidebar-menu">
@@ -195,7 +195,8 @@
                     </span>
                     Networking
                 </span>
-                <span class="material-symbols-outlined transition-transform opacity-60" :class="{ 'rotate-180': open }">
+                <span class="material-symbols-outlined transition-transform opacity-60"
+                    :class="{ 'rotate-180': open }">
                     keyboard_arrow_down
                 </span>
             </button>
