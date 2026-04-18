@@ -8,7 +8,10 @@
             <span class="material-symbols-outlined ">
                 home
             </span>
-            <h1 class="text-xl font-normal text-gray-800">
+            <h1 class="text-xl font-normal
+            {{-- text-gray-200 --}}
+            text-gray-200
+            ">
                 @hasSection('title')
                     @yield('title')
                 @else
@@ -18,48 +21,56 @@
     </div>
     <div class="row">
         <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4 mt-4">
-            <div class="bg-white p-4 rounded-lg shadow-sm">
+            <div class="
+            {{-- bg-white --}} bg-neutral-900
+             p-4 rounded-lg shadow-sm">
                 <div class="flex gap-2">
                     <span class="material-symbols-outlined text-green-500">
                         person_check
                     </span>
-                    <h2 class="text-base font-semibold text-gray-800">Online Customers</h2>
+                    <h2 class="text-base font-semibold text-gray-200">Online Customers</h2>
                 </div>
                 <div class="flex items-center justify-between mt-6">
                     <a href="#" class="text-sm text-cyan-600">View</a>
                     <p class="font-semibold text-xl text-green-500">10</p>
                 </div>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow-sm h-28">
+            <div class="
+            {{-- bg-white --}} bg-neutral-900
+             p-4 rounded-lg shadow-sm h-28">
                 <div class="flex gap-2">
                     <span class="material-symbols-outlined text-blue-500">
                         person_add
                     </span>
-                    <h2 class="text-base font-semibold text-gray-800">New Customers</h2>
+                    <h2 class="text-base font-semibold text-gray-200">New Customers</h2>
                 </div>
                 <div class="flex items-center justify-between mt-6">
                     <a href="#" class="text-sm text-cyan-600">View</a>
                     <p class="font-semibold text-xl text-blue-500">10</p>
                 </div>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow-sm h-28">
+            <div class="
+            {{-- bg-white --}} bg-neutral-900
+             p-4 rounded-lg shadow-sm h-28">
                 <div class="flex gap-2">
                     <span class="material-symbols-outlined text-yellow-500">
                         confirmation_number
                     </span>
-                    <h2 class="text-base font-semibold text-gray-800">New & open tickets</h2>
+                    <h2 class="text-base font-semibold text-gray-200">New & open tickets</h2>
                 </div>
                 <div class="flex items-center justify-between mt-6">
                     <a href="#" class="text-sm text-cyan-600">View</a>
                     <p class="font-semibold text-xl text-yellow-500">10</p>
                 </div>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow-sm h-28">
+            <div class="
+            {{-- bg-white --}} bg-neutral-900
+             p-4 rounded-lg shadow-sm h-28">
                 <div class="flex gap-2">
                     <span class="material-symbols-outlined text-red-500">
                         power_settings_circle
                     </span>
-                    <h2 class="text-base font-semibold text-gray-800">Devices down</h2>
+                    <h2 class="text-base font-semibold text-gray-200">Devices down</h2>
                 </div>
                 <div class="flex items-center justify-between mt-6">
                     <a href="#" class="text-sm text-cyan-600">View</a>
@@ -70,7 +81,7 @@
     </div>
     <hr class="my-8 -mx-2 opacity-10">
     <div class="row">
-        <div class="w-full bg-white shadow-sm p-4 rounded-lg">
+        <div class="w-full bg-neutral-900 shadow-sm p-4 rounded-lg">
             <h2 class="font-semibold">Shortcuts</h2>
             <div class="flex flex-wrap mt-4 py-2 items-center gap-3 text-[#007E41]">
                 <a href="#" class="flex gap-1 hover:-translate-y-0.5 transition-all ease-in-out">
@@ -133,15 +144,17 @@
     </div>
     <div class="row">
         <div class="columns-1 lg:columns-2 gap-4 space-y-4 mt-4">
-            <div x-data="{ systemStatusOpen: true }" class="bg-white px-4 rounded-lg shadow-sm break-inside-avoid order-1">
+            <div x-data="{ systemStatusOpen: true }" class="bg-neutral-900 px-4 rounded-lg shadow-sm break-inside-avoid order-1">
                 <div class="flex items-center justify-between py-6">
                     <div class="flex gap-2">
                         <span class="material-symbols-outlined">
                             host
                         </span>
-                        <h2 class="text-base font-semibold text-gray-800">System Status</h2>
+                        <h2 class="text-base font-semibold text-gray-200">System Status</h2>
                     </div>
-                    <button @click="systemStatusOpen = !systemStatusOpen" class="flex items-center justify-center p-1">
+                    <button @click="systemStatusOpen = !systemStatusOpen"
+                        class="flex items-center transition-all justify-center p-1"
+                        :class="{ 'rotate-180': systemStatusOpen }">
                         <span class="material-symbols-outlined cursor-pointer">
                             keyboard_arrow_down
                         </span>
@@ -163,7 +176,7 @@
                         <div class="flex flex-col gap-2 lg:flex-row lg:justify-between py-2">
                             <p>CPU Usage</p>
                             <div class="flex w-full lg:w-[40%] text-center">
-                                <div class="bg-gray-200 w-full font-semibold rounded-md">
+                                <div class="bg-gray-500 w-full font-semibold rounded-md">
                                     0.00 %
                                 </div>
                             </div>
@@ -184,7 +197,7 @@
                         <div class="flex flex-col gap-2 lg:flex-row lg:justify-between py-2">
                             <p>I/O wait</p>
                             <div class="flex w-full lg:w-[40%] text-center">
-                                <div class="bg-gray-200 w-full font-semibold rounded-md">
+                                <div class="bg-gray-500 w-full font-semibold rounded-md">
                                     0.00 %
                                 </div>
                             </div>
@@ -226,15 +239,17 @@
                     </div>
                 </div>
             </div>
-            <div x-data="{ networkingOpen: true }" class="bg-white px-4 rounded-lg shadow-sm break-inside-avoid">
+            <div x-data="{ networkingOpen: true }" class="bg-neutral-900 px-4 rounded-lg shadow-sm break-inside-avoid">
                 <div class="flex items-center justify-between py-6">
                     <div class="flex gap-2">
                         <span class="material-symbols-outlined text-cyan-500">
                             bring_your_own_ip
                         </span>
-                        <h2 class="text-base font-semibold text-gray-800">Networking</h2>
+                        <h2 class="text-base font-semibold text-gray-200">Networking</h2>
                     </div>
-                    <button @click="networkingOpen = !networkingOpen" class="flex items-center justify-center p-1">
+                    <button @click="networkingOpen = !networkingOpen"
+                        class="flex items-center transition-all justify-center p-1"
+                        :class="{ 'rotate-180': networkingOpen }">
                         <span class="material-symbols-outlined cursor-pointer">
                             keyboard_arrow_down
                         </span>
@@ -290,15 +305,16 @@
                     </div>
                 </div>
             </div>
-            <div x-data="{ leadsOpen: true }" class="bg-white px-4 rounded-lg shadow-sm break-inside-avoid">
+            <div x-data="{ leadsOpen: true }" class="bg-neutral-900 px-4 rounded-lg shadow-sm break-inside-avoid">
                 <div class="flex items-center justify-between py-6">
                     <div class="flex gap-2">
                         <span class="material-symbols-outlined text-cyan-500">
                             partner_exchange
                         </span>
-                        <h2 class="text-base font-semibold text-gray-800">Leads</h2>
+                        <h2 class="text-base font-semibold text-gray-200">Leads</h2>
                     </div>
-                    <button @click="leadsOpen = !leadsOpen" class="flex items-center justify-center p-1">
+                    <button @click="leadsOpen = !leadsOpen" class="flex items-center transition-all justify-center p-1"
+                        :class="{ 'rotate-180': leadsOpen }">
                         <span class="material-symbols-outlined cursor-pointer">
                             keyboard_arrow_down
                         </span>
@@ -329,15 +345,17 @@
                     </div>
                 </div>
             </div>
-            <div x-data="{ customersOpen: true }" class="bg-white px-4 rounded-lg shadow-sm break-inside-avoid">
+            <div x-data="{ customersOpen: true }" class="bg-neutral-900 px-4 rounded-lg shadow-sm break-inside-avoid">
                 <div class="flex items-center justify-between py-6">
                     <div class="flex gap-2">
                         <span class="material-symbols-outlined text-cyan-500">
                             groups
                         </span>
-                        <h2 class="text-base font-semibold text-gray-800">Customers</h2>
+                        <h2 class="text-base font-semibold text-gray-200">Customers</h2>
                     </div>
-                    <button @click="customersOpen = !customersOpen" class="flex items-center justify-center p-1">
+                    <button @click="customersOpen = !customersOpen"
+                        class="flex items-center transition-all justify-center p-1"
+                        :class="{ 'rotate-180': customersOpen }">
                         <span class="material-symbols-outlined cursor-pointer">
                             keyboard_arrow_down
                         </span>
@@ -393,15 +411,16 @@
                     </div>
                 </div>
             </div>
-            <div x-data="{ financeOpen: true }" class="bg-white px-4 rounded-lg shadow-sm break-inside-avoid">
+            <div x-data="{ financeOpen: true }" class="bg-neutral-900 px-4 rounded-lg shadow-sm break-inside-avoid">
                 <div class="flex items-center justify-between py-6">
                     <div class="flex gap-2">
                         <span class="material-symbols-outlined text-cyan-500">
                             payments
                         </span>
-                        <h2 class="text-base font-semibold text-gray-800">Finance</h2>
+                        <h2 class="text-base font-semibold text-gray-200">Finance</h2>
                     </div>
-                    <button @click="financeOpen = !financeOpen" class="flex items-center justify-center p-1">
+                    <button @click="financeOpen = !financeOpen"
+                        class="flex items-center transition-all justify-center p-1" :class="{ 'rotate-180': financeOpen }">
                         <span class="material-symbols-outlined cursor-pointer">
                             keyboard_arrow_down
                         </span>
@@ -456,15 +475,16 @@
                     </div>
                 </div>
             </div>
-            <div x-data="{ ticketsOpen: true }" class="bg-white px-4 rounded-lg shadow-sm break-inside-avoid">
+            <div x-data="{ ticketsOpen: true }" class="bg-neutral-900 px-4 rounded-lg shadow-sm break-inside-avoid">
                 <div class="flex items-center justify-between py-6">
                     <div class="flex gap-2">
                         <span class="material-symbols-outlined text-cyan-500">
                             confirmation_number
                         </span>
-                        <h2 class="text-base font-semibold text-gray-800">Tickets</h2>
+                        <h2 class="text-base font-semibold text-gray-200">Tickets</h2>
                     </div>
-                    <button @click="ticketsOpen = !ticketsOpen" class="flex items-center justify-center p-1">
+                    <button @click="ticketsOpen = !ticketsOpen"
+                        class="flex items-center transition-all justify-center p-1" :class="{ 'rotate-180': ticketsOpen }">
                         <span class="material-symbols-outlined cursor-pointer">
                             keyboard_arrow_down
                         </span>

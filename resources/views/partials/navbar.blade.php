@@ -2,8 +2,8 @@
     <div class="flex items-center gap-3 lg:-ml-2 w-full lg:w-auto">
         <div class="w-1/3">
             <button @click="sidebarOpen = !sidebarOpen"
-                class="bg-gray-50 p-0.5 rounded-md flex items-center justify-center shadow-sm cursor-pointer active:shadow-sm active:translate-y-px">
-                <span class="material-symbols-outlined">
+                class="bg-neutral-700 p-0.5 rounded-md flex items-center justify-center shadow-sm cursor-pointer active:shadow-sm active:translate-y-px">
+                <span class="material-symbols-outlined text-white!">
                     menu
                 </span>
             </button>
@@ -106,15 +106,15 @@
         </nav> --}}
         <nav x-data="{ profileOpen: false, notificationsOpen: false }" class="relative flex items-center gap-3">
             <button @click="notificationsOpen = !notificationsOpen"
-                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1 bg-gray-50 cursor-pointer">
-                <span class="material-symbols-outlined">
+                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1 bg-neutral-600 cursor-pointer">
+                <span class="material-symbols-outlined text-white!">
                     notifications
                 </span>
             </button>
 
             <button @click="profileOpen = !profileOpen"
-                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1 bg-gray-50 cursor-pointer">
-                <span class="material-symbols-outlined">
+                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1 bg-neutral-600 cursor-pointer">
+                <span class="material-symbols-outlined text-white!">
                     person
                 </span>
             </button>
@@ -149,11 +149,14 @@
                     </li>
 
                     <li class="w-full py-0.5">
-                        <a href="#"
-                            class="px-2 mx-1.5 py-1 flex items-center gap-1 rounded-sm hover:bg-red-500 hover:text-white">
-                            <span class="material-symbols-outlined">logout</span>
-                            Logout
-                        </a>
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                            <button type="submit"
+                                class="px-2 w-[92%] mx-1.5 py-1 flex items-center gap-1 rounded-sm hover:bg-red-500 hover:text-white cursor-pointer">
+                                <span class="material-symbols-outlined">logout</span>
+                                Logout
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
