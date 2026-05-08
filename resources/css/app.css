@@ -21,21 +21,17 @@
 
 @layer components {
     header {
-        @apply /* bg-white  */
-        bg-black
+        @apply bg-white
+        /* bg-black */
         w-full h-12 flex items-center justify-between px-6 shadow-sm sticky top-0 z-30;
     }
-
-    /* aside {
-        @apply lg:block bg-[#007E41] w-60 min-h-full overflow-y-auto mb-32 pt-4 text-white;
-    } */
 
     aside {
         @apply fixed lg:relative
            top-12 lg:top-0 left-0
            min-h-full
-           /* bg-[#007E41]  */
-           bg-[#121212]
+           bg-[#007E41]
+           /* bg-[#121212] */
            text-white
            overflow-y-auto pt-4 mb-32
            transition-all duration-300
@@ -44,9 +40,10 @@
 
     aside ul li .sidebar-menu {
         @apply w-full text-sm flex items-center justify-between py-1 pl-4 pr-2
-        /* hover:bg-[#F14F10]  */
-        hover:bg-neutral-500
-        hover:text-gray-200 cursor-pointer;
+        hover:bg-[#F14F10]
+        /* hover:bg-neutral-500 */
+        /* hover:text-gray-200  */
+        cursor-pointer;
     }
 
     .active {
@@ -55,15 +52,15 @@
 
     main {
         @apply flex-1 overflow-y-auto flex flex-col
-        /* bg-gray-100  */
-        bg-neutral-800 text-gray-100
+        bg-gray-100
+        /* bg-neutral-800 text-gray-100 */
         h-full;
     }
 
     footer {
         @apply flex-1 pl-2 fixed w-full bottom-0
-        /* bg-[#F14F10]; */
-        bg-[#007E41];
+        bg-[#F14F10];
+        /* bg-[#007E41]; */
     }
 
     /* footer {

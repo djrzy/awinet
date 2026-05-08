@@ -18,6 +18,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
+@livewireScripts
+
 <body x-data="{ sidebarOpen: window.innerWidth >= 1024 }" class="overflow-hidden relative font-default">
     @include('partials.navbar')
 
@@ -27,7 +29,9 @@
     <div class="flex h-screen overflow-hidden">
         @include('partials.sidebar')
         <main>
-            <div class="px-6 pt-6 pb-26">
+            <div class="px-6 pt-6 pb-26
+            {{-- bg-gray-100 --}}
+            ">
                 @yield('content')
             </div>
             @include('partials.footer')

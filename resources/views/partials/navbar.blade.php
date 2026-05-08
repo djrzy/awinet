@@ -2,8 +2,12 @@
     <div class="flex items-center gap-3 lg:-ml-2 w-full lg:w-auto">
         <div class="w-1/3">
             <button @click="sidebarOpen = !sidebarOpen"
-                class="bg-neutral-700 p-0.5 rounded-md flex items-center justify-center shadow-sm cursor-pointer active:shadow-sm active:translate-y-px">
-                <span class="material-symbols-outlined text-white!">
+                class="
+                {{-- bg-neutral-700 --}}
+                 p-0.5 rounded-md flex items-center justify-center shadow-sm cursor-pointer active:shadow-sm active:translate-y-px">
+                <span class="material-symbols-outlined
+                {{-- text-white! --}}
+                ">
                     menu
                 </span>
             </button>
@@ -12,109 +16,25 @@
         <div class="w-1/3"></div>
     </div>
     <div class="flex">
-        {{-- <nav>
-            <button
-                class="hidden relative lg:flex text-2xl items-center justify-center rounded-full p-1 bg-white pointer-cursor hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-200 cursor-pointer">
-                <span class="material-symbols-outlined">
-                    notifications
-                </span>
-                <div class="absolute hidden bg-white right-0 top-14 rounded-sm w-36 shadow-md">
-                    <ul class="hidden lg:flex flex-col items-start justify-center text-sm">
-                        <li class="w-full py-1.5 hover:bg-gray-100">
-                            <a href="#" class="px-3 flex items-center gap-1">
-                                <span class="material-symbols-outlined">
-                                    home
-                                </span>
-                                Home
-                            </a>
-                        </li>
-                        <li class="w-full py-1.5 hover:bg-gray-100">
-                            <a href="#" class="px-3 flex items-center gap-1">
-                                <span class="material-symbols-outlined">
-                                    person
-                                </span>
-                                Profile
-                            </a>
-                        </li>
-                        <li class="w-full py-1.5 hover:bg-gray-100">
-                            <a href="#" class="px-3 flex items-center gap-1">
-                                <span class="material-symbols-outlined">
-                                    settings
-                                </span>
-                                Settings
-                            </a>
-                        </li>
-                        <li class="w-full py-1.5 hover:bg-red-500 hover:text-white">
-                            <a href="#" class="px-3 flex items-center gap-1">
-                                <span class="material-symbols-outlined">
-                                    logout
-                                </span>
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </button>
-        </nav> --}}
-        {{-- <nav>
-            <button @click="profiledropdownOpen = !profiledropdownOpen"
-                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1 bg-gray-50 pointer-cursor cursor-pointer">
-                <span class="material-symbols-outlined">
-                    person
-                </span>
-                <div class="hidden absolute bg-white right-0 top-[130%] rounded-sm w-36 shadow-md py-1">
-                    <ul class="hidden lg:flex flex-col items-start justify-center text-sm">
-                        <li class="w-full py-0.5">
-                            <a href="#"
-                                class="px-2 mx-1.5 py-1 flex items-center gap-1 rounded-sm hover:bg-gray-100">
-                                <span class="material-symbols-outlined">
-                                    home
-                                </span>
-                                Home
-                            </a>
-                        </li>
-                        <li class="w-full py-0.5">
-                            <a href="#"
-                                class="px-2 mx-1.5 py-1 flex items-center gap-1 rounded-sm hover:bg-gray-100">
-                                <span class="material-symbols-outlined">
-                                    person
-                                </span>
-                                Profile
-                            </a>
-                        </li>
-                        <li class="w-full py-0.5">
-                            <a href="#"
-                                class="px-2 mx-1.5 py-1 flex items-center gap-1 rounded-sm hover:bg-gray-100">
-                                <span class="material-symbols-outlined">
-                                    settings
-                                </span>
-                                Settings
-                            </a>
-                        </li>
-                        <li class="w-full py-0. hover:text-white">
-                            <a href="#"
-                                class="px-2 mx-1.5 py-1 flex items-center gap-1 rounded-sm hover:bg-red-500">
-                                <span class="material-symbols-outlined">
-                                    logout
-                                </span>
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </button>
-        </nav> --}}
         <nav x-data="{ profileOpen: false, notificationsOpen: false }" class="relative flex items-center gap-3">
             <button @click="notificationsOpen = !notificationsOpen"
-                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1 bg-neutral-600 cursor-pointer">
-                <span class="material-symbols-outlined text-white!">
+                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1
+                {{-- bg-neutral-600 --}}
+                 cursor-pointer">
+                <span class="material-symbols-outlined
+                {{-- text-white! --}}
+                ">
                     notifications
                 </span>
             </button>
 
             <button @click="profileOpen = !profileOpen"
-                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1 bg-neutral-600 cursor-pointer">
-                <span class="material-symbols-outlined text-white!">
+                class="hidden shadow-sm active:translate-y-px lg:flex text-2xl items-center justify-center rounded-full p-1
+                {{-- bg-neutral-600 --}}
+                 cursor-pointer">
+                <span class="material-symbols-outlined
+                {{-- text-white! --}}
+                ">
                     person
                 </span>
             </button>

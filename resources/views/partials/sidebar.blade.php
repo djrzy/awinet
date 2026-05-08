@@ -1,7 +1,7 @@
 <aside :class="sidebarOpen ? 'w-60' : 'w-0'" x-cloak>
     <ul class="flex flex-col pb-16">
         <li>
-            <a href="#" class="sidebar-menu">
+            <a href="/" class="sidebar-menu">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
                         home
@@ -30,12 +30,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
-                        Search
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
+                    <a href="/customer" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
                         List
                     </a>
                 </li>
