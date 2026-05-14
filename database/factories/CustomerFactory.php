@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CustomerFactory extends Factory
 {
+
+    protected static int $customerCode = 1;
     /**
      * Define the model's default state.
      *
@@ -22,7 +24,7 @@ class CustomerFactory extends Factory
             'tenant_id' => 1,
             'user_id' => User::factory(),
             'internet_plans_id' => null,
-            'customer_code' => 'CUS-' . str_pad(fake()->unique()->numberBetween(1, 99999), 5, '0', STR_PAD_LEFT),
+            'customer_code' => 'CUS-' . str_pad(static::$customerCode++, 5, '0', STR_PAD_LEFT),
             'nik' => fake()->numerify('################'),
             'address' => fake()->address(),
             'postal_code' => fake()->postcode(),

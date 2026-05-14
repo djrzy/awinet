@@ -11,6 +11,8 @@
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
     --font-default: "Roboto";
+    --color-primary: #007e41;
+    --color-secondary: #f14f10;
 }
 
 @layer base {
@@ -33,7 +35,7 @@
            bg-[#007E41]
            /* bg-[#121212] */
            text-white
-           overflow-y-auto pt-4 mb-32
+           overflow-y-auto pt-5 mb-32
            transition-all duration-300
            z-20;
     }
@@ -46,8 +48,8 @@
         cursor-pointer;
     }
 
-    .active {
-        @apply text-white bg-[#F14F10];
+    aside ul li .active {
+        @apply text-white bg-[#F14F10] font-semibold;
     }
 
     main {
@@ -59,8 +61,21 @@
 
     footer {
         @apply flex-1 pl-2 fixed w-full bottom-0
-        bg-[#F14F10];
+        bg-[#F14F10] z-10;
+
         /* bg-[#007E41]; */
+    }
+
+    .leaflet-container {
+        z-index: 1;
+    }
+
+    .leaflet-control {
+        z-index: 2;
+    }
+
+    .leaflet-pane {
+        z-index: 1;
     }
 
     /* footer {

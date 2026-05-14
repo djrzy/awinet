@@ -1,7 +1,7 @@
 <aside :class="sidebarOpen ? 'w-60' : 'w-0'" x-cloak>
     <ul class="flex flex-col pb-16">
         <li>
-            <a href="/" class="sidebar-menu">
+            <a href="/" class="sidebar-menu h-9 {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
                         home
@@ -11,8 +11,12 @@
             </a>
         </li>
         <li class="font-bold text-xs ml-4 opacity-50 mt-4 mb-1">CRM</li>
-        <li x-data="{ open: false }" @click.away="open = false">
-            <button @click="open = !open" class="sidebar-menu" :class="{ 'font-bold': open }">
+        <li x-data="{
+            open: {{ request()->routeIs('customer*') ? 'true' : 'false' }}
+        }" @click.away="open = false">
+            <button @click="open = !open"
+                class="sidebar-menu h-9 {{ request()->routeIs('customer*') ? 'bg-[#F14F10] font-semibold' : '' }}"
+                :class="{ 'font-semibold': open }">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
                         groups
@@ -25,13 +29,17 @@
             </button>
             <ul x-show="open" x-collapse x-cloak class="text-sm space-y-0">
                 <li>
-                    <a href="#" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
-                        Add
+                    <a href="{{ route('customer') }}"
+                        class="hover:text-white hover:bg-white/30 pl-12.5 flex justify-between items-center h-9 {{ request()->routeIs('customer') ? 'font-semibold' : '' }}">
+                        List
+                        {!! request()->routeIs('customer') ? '<div class="w-1 h-9 bg-[#F14F10]"></div>' : '' !!}
                     </a>
                 </li>
                 <li>
-                    <a href="/customer" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
-                        List
+                    <a href="{{ route('customerAdd') }}"
+                        class="hover:text-white hover:bg-white/30 pl-12.5 flex justify-between items-center h-9 {{ request()->routeIs('customerAdd') ? 'font-semibold' : '' }}">
+                        Add
+                        {!! request()->routeIs('customerAdd') ? '<div class="w-1 h-9 bg-[#F14F10]"></div>' : '' !!}
                     </a>
                 </li>
                 <li>

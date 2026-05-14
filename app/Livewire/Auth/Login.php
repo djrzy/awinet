@@ -27,7 +27,7 @@ class Login extends Component
 
             session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended(route('dashboard'));
         }
         $this->password = '';
         $this->addError('status', 'Your provided credentials do not match our records.');

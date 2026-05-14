@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\Customer\CustomerController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('pages.Auth.login');
+    return view('pages.auth.login');
 })->name('login')
     ->middleware('guest');
 
@@ -23,3 +24,12 @@ Route::get('/customer', function () {
 })
     ->middleware(['auth'])
     ->name('customer');
+
+Route::get('/customer/add', function () {
+    return view('pages.admin.customer.create');
+})
+    ->middleware(['auth'])
+    ->name('customerAdd');
+
+Route::get('/customers/{customer}', [CustomerController::class, 'show'])->middleware('auth')
+    ->name('admin.customers.show');

@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Customers')
+@section('title', 'Add Customer')
 
 @section('content')
     <div class="row">
@@ -19,8 +19,6 @@
         </div>
     </div>
     <div class="row mt-4">
-        <div class="bg-white w-full rounded-lg p-2 shadow-sm">
-            @livewire('admin.customer.customer-table')
-        </div>
+        @livewire('admin.customer.create')
     </div>
 @endsection

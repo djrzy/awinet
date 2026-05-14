@@ -43,12 +43,11 @@
     <div class="hidden lg:flex flex-col lg:w-[30%] lg:px-12 bg-gray-100 h-screen items-center space-y-3 justify-center">
         <img src="{{ asset('awinet.png') }}" alt="Company Logo" class="mx-auto h-16 w-auto">
         <h2 class="text-xl font-semibold text-center">Login</h2>
-        <form wire:submit.prevent="login" {{-- action="/login" method="POST"  --}} class="space-y-4 w-full max-w-lg">
+        <form wire:submit.prevent="login" class="space-y-4 w-full max-w-lg">
             {{-- @csrf --}}
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" {{-- id="email" name="email"
-                required --}} wire:model="email"
+                <input type="email" id="email" wire:model="email"
                     class="w-full px-3 py-2 mt-1 border rounded focus:outline-none focus:ring focus:ring-blue-200">
                 @error('email')
                     <span class="text-red-500 text-xs block text-end">{{ $message }}</span>

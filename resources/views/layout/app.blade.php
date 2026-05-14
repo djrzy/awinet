@@ -33,6 +33,8 @@
             {{-- bg-gray-100 --}}
             ">
                 @yield('content')
+
+                @stack('script')
             </div>
             @include('partials.footer')
         </main>
