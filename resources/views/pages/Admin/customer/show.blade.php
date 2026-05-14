@@ -71,17 +71,20 @@
         {{-- PROFILE --}}
         <div x-show="tab === 'profile'" class="bg-white rounded-b-lg rounded-tr-lg shadow p-4">
 
-            <div x-data="{ action: false }" class="w-full bg-gray-200 flex justify-end rounded-md mb-6">
+            <div x-data="{ actionOpen: false }" class="w-full bg-gray-200 flex justify-end rounded-md mb-6">
                 <div class="relative">
-                    <button
+                    <button @click="actionOpen = !actionOpen"
                         class='pr-2 pl-4 py-1 my-2 mr-2 border rounded-lg bg-white flex items-center gap-1 cursor-pointer'>
                         Actions
                         <span class="material-symbols-outlined">
                             arrow_drop_down
                         </span>
                     </button>
-                    <div class="absolute">
-
+                    <div x-show="actionOpen" @click.away="actionOpen = false"
+                        class="absolute bg-white overflow-hidden *:px-4 *:py-2 shadow-md text-sm rounded-md w-[160%] right-2 z-20 *:hover:bg-primary *:hover:text-white">
+                        <a href="#" class="block">Disable User Login</a>
+                        <a href="#" class="block">Suspend Internet Connection</a>
+                        <a href="#" class="block">Activate Internet Connection</a>
                     </div>
                 </div>
             </div>
@@ -427,6 +430,11 @@
         </div>
 
     </div>
+    <div class="row mt-4">
+        <div class="bg-white rounded-lg px-6 py-4">
+            <p class="font-semibold text-lg">Activity</p>
+        </div>
+    </div>
 @endsection
 
 @push('script')
@@ -453,6 +461,15 @@
                     maxZoom: 19,
                 }).addTo(this.map);
 
+                // tampilkan marker dari database
+                if (this.defaultLat && this.defaultLng) {
+
+                    this.updateCoordinate(
+                        this.defaultLat,
+                        this.defaultLng
+                    );
+                }
+
                 this.map.on('click', (e) => {
 
                     const {
@@ -473,6 +490,8 @@
 
                 this.lat = lat;
                 this.lng = lng;
+
+                this.map.panTo([lat, lng]);
 
                 if (!this.marker) {
 

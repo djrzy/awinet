@@ -1,7 +1,7 @@
 <div x-data="{ confirmSubmit: false, success: false }" x-on:customer-created.window="success = true; setTimeout(() => success = false, 3000)"
     class="bg-white w-full rounded-lg p-2 shadow-sm">
     <form @submit.prevent="confirmSubmit = true">
-        <div class="mx-auto space-y-3 py-4 px-6 text-sm lg:w-[45%]">
+        <div class="mx-auto space-y-3 py-4 px-6 text-sm lg:w-[75%] 2xl:w-[45%]">
             <div class="w-full flex flex-col lg:items-center">
                 <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
                     <label for="name" class="lg:w-[15%] lg:text-right">Name</label>
