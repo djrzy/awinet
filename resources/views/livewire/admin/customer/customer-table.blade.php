@@ -90,7 +90,7 @@
                             {{ $customer->user->phone }}
                         </td>
                         <td class="px-6 py-4">
-                            $2999
+                            {{ $customer->internet_plans_id }}
                         </td>
                         <td class="px-6 py-4">
                             @if ($customer->status === 'active')

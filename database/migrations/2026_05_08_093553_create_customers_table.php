@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('nik')->nullable();
             $table->text('address');
             $table->string('postal_code')->nullable();
-            $table->text('longitude')->nullable();
             $table->text('latitude')->nullable();
+            $table->text('longitude')->nullable();
             $table->enum('status', ['active', 'terminated', 'suspended', 'pending'])->default('pending');
             $table->timestamps();
             $table->softDeletes();

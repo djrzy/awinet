@@ -54,6 +54,6 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.customer.create');
+        return view('livewire.admin.customer.create');
     }
 }

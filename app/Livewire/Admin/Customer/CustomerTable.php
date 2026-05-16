@@ -83,7 +83,7 @@ class CustomerTable extends Component
 
             ->paginate($this->perPage);
 
-        return view('livewire.customer.customer-table', [
+        return view('livewire.admin.customer.customer-table', [
             'customers' => $customers
         ]);
     }

@@ -155,7 +155,7 @@
             </button>
         </div>
     </form>
-    <div x-show="confirmSubmit" x-transition x-cloak
+    <div x-show="confirmSubmit" x-transition x-cloak cursor-pointer
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
         <div @click.outside="confirmSubmit = false" class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
@@ -170,7 +170,8 @@
 
             <div class="flex justify-end gap-2 mt-6">
 
-                <button type="button" @click="confirmSubmit = false" class="px-4 py-2 rounded-md border">
+                <button type="button" @click="confirmSubmit = false"
+                    class="px-4 py-2 rounded-md border cursor-pointer">
                     Cancel
                 </button>
 
@@ -179,7 +180,7 @@
                     confirmSubmit = false;
                     $wire.save();
                 "
-                    class="px-4 py-2 rounded-md bg-primary text-white">
+                    class="px-4 py-2 rounded-md bg-primary text-white cursor-pointer">
                     Confirm
                 </button>
 
