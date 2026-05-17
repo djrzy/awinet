@@ -218,14 +218,15 @@
 
                     <div class="flex justify-end gap-2 mt-6">
 
-                        <button type="button" @click="confirmSubmit = false" class="px-4 py-2 rounded-md border">
+                        <button type="button" @click="confirmSubmit = false"
+                            class="px-4 py-2 rounded-md border cursor-pointer">
 
                             Cancel
 
                         </button>
 
                         <button type="submit" @click="confirmSubmit = false"
-                            class="px-4 py-2 rounded-md bg-primary text-white">
+                            class="px-4 py-2 rounded-md bg-primary text-white cursor-pointer">
 
                             Confirm
 

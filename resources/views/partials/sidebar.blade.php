@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('customerAdd') }}"
+                    <a href="{{ route('customer_add') }}"
                         class="hover:text-white hover:bg-white/30 pl-12.5 flex justify-between items-center h-9 {{ request()->routeIs('customerAdd') ? 'font-semibold' : '' }}">
                         Add
                         {!! request()->routeIs('customerAdd') ? '<div class="w-1 h-9 bg-[#F14F10]"></div>' : '' !!}
@@ -338,7 +338,8 @@
             </button>
             <ul x-show="open" x-collapse x-cloak class="text-sm space-y-0">
                 <li>
-                    <a href="#" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
+                    <a href="{{ route('internet_plans') }}"
+                        class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
                         Internet
                     </a>
                 </li>

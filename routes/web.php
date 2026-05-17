@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\Customer\CustomerController;
+use App\Http\Controllers\Admin\InternetPlan\InternetPlanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +23,8 @@ Route::get('/customer', function () {
 
 Route::get('/customer/add', function () {
     return view('pages.admin.customer.create');
-})->middleware(['auth'])->name('customerAdd');
+})->middleware(['auth'])->name('customer_add');
 
 Route::get('/customers/{customer}', [CustomerController::class, 'show'])->middleware('auth')->name('admin.customers.show');
+
+Route::get('/internet-plan', [InternetPlanController::class, 'show'])->middleware('auth')->name('internet_plans');

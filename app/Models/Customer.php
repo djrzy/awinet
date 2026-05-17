@@ -30,6 +30,11 @@ class Customer extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function internet_plan()
+    {
+        return $this->hasOne(InternetPlan::class);
+    }
+
     #[Override]
     public function getRouteKeyName(): string
     {
