@@ -18,8 +18,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->unsignedInteger('download_speed');
             $table->unsignedInteger('upload_speed');
-            $table->decimal('price');
-            $table->text('notes')->nullable();
+            $table->decimal('price', 15, 2);
+            $table->enum('service_type', ['pppoe', 'dedicated', 'static', 'hotspot'])->default('pppoe');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -23,14 +23,6 @@
             </button>
 
         </div>
-        {{-- <div class="relative">
-            <input wire:model.live.debounce.350ms="search" type="text"
-                class="py-1 px-2 border text-sm border-black/20 rounded-sm w-full placeholder:text-sm placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#007E41]"
-                placeholder="Search..">
-            <span class="material-symbols-outlined absolute -translate-y-1/2 top-1/2 right-2 text-lg!">
-                search
-            </span>
-        </div> --}}
         <div>
             <label for="" class="text-sm">Show</label>
             <select wire:model.live="perPage" class="border border-black/20 rounded p-2 text-sm mx-0.5">
@@ -96,16 +88,6 @@
                             @if ($customer->status === 'active')
                                 <div
                                     class="bg-green-500 rounded-sm text-white px-1 py-0.5 uppercase text-center font-semibold select-none">
-                                    {{ $customer->status }}
-                                </div>
-                            @elseif ($customer->status === 'pending')
-                                <div
-                                    class="bg-yellow-500 rounded-sm text-white px-1 py-0.5 uppercase text-center font-semibold select-none">
-                                    {{ $customer->status }}
-                                </div>
-                            @elseif ($customer->status === 'suspended')
-                                <div
-                                    class="bg-red-500 rounded-sm text-white px-1 py-0.5 uppercase text-center font-semibold select-none">
                                     {{ $customer->status }}
                                 </div>
                             @else

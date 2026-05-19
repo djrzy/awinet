@@ -20,7 +20,26 @@ class InternetPlanSeeder extends Seeder
             'download_speed' => '20',
             'upload_speed' => '20',
             'price' => 100000,
-            'notes' => null,
+            'service_type' => fake()->randomElement([
+                'pppoe',
+                'dedicated',
+                'hotspot',
+                'static',
+            ])
+        ]);
+        InternetPlan::create([
+            'tenant_id' => null,
+            'name' => '100 Mbps',
+            'description' =>  'Paket internet 100 Mbps',
+            'download_speed' => '100',
+            'upload_speed' => '100',
+            'price' => 1000000,
+            'service_type' => fake()->randomElement([
+                'pppoe',
+                'dedicated',
+                'hotspot',
+                'static',
+            ])
         ]);
     }
 }

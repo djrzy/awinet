@@ -1,4 +1,4 @@
-<div x-data="{ confirmSubmit: false, success: false }" x-on:customer-created.window="success = true; setTimeout(() => success = false, 3000)"
+<div x-data="{ confirmSubmit: false, success: false }" x-on:internet-plan-created.window="success = true; setTimeout(() => success = false, 3000)"
     class="bg-white w-full rounded-lg p-2 shadow-sm">
     <form @submit.prevent="confirmSubmit = true">
         <div class="mx-auto space-y-3 py-4 px-6 text-sm lg:w-[75%] 2xl:w-[45%]">
@@ -155,7 +155,7 @@
             </button>
         </div>
     </form>
-    <div x-show="confirmSubmit" x-transition x-cloak cursor-pointer
+    <div x-show="confirmSubmit" x-transition x-cloak
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
         <div @click.outside="confirmSubmit = false" class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">

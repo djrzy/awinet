@@ -244,7 +244,7 @@
                 x-transition:enter-end="translate-x-0 opacity-100"
                 x-transition:leave="transition ease-in duration-300"
                 x-transition:leave-start="translate-x-0 opacity-100"
-                x-transition:leave-end="translate-x-full opacity-0" x-cloak class="fixed top-15 right-6 z-[9999]">
+                x-transition:leave-end="translate-x-full opacity-0" x-cloak class="fixed top-15 right-6 z-9999">
 
                 <div class="bg-white px-4 py-3 rounded-lg shadow-lg flex gap-3 items-center">
 

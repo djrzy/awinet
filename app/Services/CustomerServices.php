@@ -27,14 +27,14 @@ class CustomerServices
             return Customer::create([
                 'tenant_id' => null,
                 'user_id' => $user->id,
-                'internet_plans_id' => null,
+                // 'internet_plans_id' => null,
                 'customer_code' => $this->generateCustomerCode(),
                 'nik' => $data['nik'],
                 'address' => $data['address'],
                 'postal_code' => $data['postal_code'],
                 'longitude' => $data['longitude'],
                 'latitude' => $data['latitude'],
-                'status' => 'pending',
+                'status' => 'inactive',
             ]);
         });
     }

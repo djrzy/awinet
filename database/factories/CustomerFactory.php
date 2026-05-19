@@ -23,18 +23,15 @@ class CustomerFactory extends Factory
         return [
             'tenant_id' => 1,
             'user_id' => User::factory(),
-            'internet_plans_id' => null,
             'customer_code' => 'CUS-' . str_pad(static::$customerCode++, 5, '0', STR_PAD_LEFT),
             'nik' => fake()->numerify('################'),
             'address' => fake()->address(),
             'postal_code' => fake()->postcode(),
-            'longitude' => fake()->longitude(),
-            'latitude' => fake()->latitude(),
+            'longitude' => fake()->longitude(95.0, 141.0),
+            'latitude' => fake()->latitude(-11.0, 6.0),
             'status' => fake()->randomElement([
                 'active',
-                'pending',
-                'suspended',
-                'terminated'
+                'inactive'
             ]),
         ];
     }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Customer;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,9 +18,17 @@ class InternetPlan extends Model
         'description',
         'download_speed',
         'upload_speed',
+        'service_type',
         'price',
-        'notes',
+        'status'
     ];
+
+    protected function priceFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => rupiah($this->price)
+        );
+    }
 
     public function customer()
     {
