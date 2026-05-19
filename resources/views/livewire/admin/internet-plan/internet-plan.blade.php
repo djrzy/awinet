@@ -1,12 +1,17 @@
 <div x-data="{
     showForm: false,
     showViewModal: @entangle('showViewModal'),
-    success: false
+    success: false,
+    successDelete: false
 }"
     x-on:internet-plan-created.window="
         showForm = false;
         success = true;
         setTimeout(() => success = false, 3000)
+    "
+    x-on:internet-plan-deleted.window="
+        successDelete = true;
+        setTimeout(() => successDelete = false, 3000)
     "
     class="relative bg-neutral-primary-soft shadow-xs rounded-base p-2">
     {{-- Header --}}
@@ -211,6 +216,27 @@
                 </p>
                 <p class="text-sm">
                     A new Internet Plan successfully created.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete Toast --}}
+    <div x-show="successDelete" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="translate-x-full opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
+        x-transition:leave="transition ease-in duration-300" x-transition:leave-start="translate-x-0 opacity-100"
+        x-transition:leave-end="translate-x-full opacity-0" x-cloak class="fixed top-16 right-6 z-9999">
+        <div class="bg-white px-4 py-3 rounded-lg shadow-lg flex gap-3 items-center max-w-sm">
+            <span class="material-symbols-outlined text-green-500! text-3xl!">
+                check_circle
+            </span>
+
+            <div>
+                <p class="font-semibold text-sm uppercase">
+                    Internet Plan Deleted
+                </p>
+                <p class="text-sm">
+                    The Internet Plan was successfully deleted.
                 </p>
             </div>
         </div>
@@ -423,7 +449,7 @@
                                 Created At
                             </p>
 
-                            <div class="px-3 bg-gray-50">
+                            <div class="px-3">
                                 {{ $selectedPlan->created_at?->format('d M Y H:i') }}
                             </div>
                         </div>
@@ -433,7 +459,7 @@
                                 Updated At
                             </p>
 
-                            <div class="px-3 bg-gray-50">
+                            <div class="px-3">
                                 {{ $selectedPlan->updated_at?->format('d M Y H:i') }}
                             </div>
                         </div>
@@ -443,7 +469,8 @@
             </div>
 
             {{-- Footer --}}
-            <div class="px-6 py-4 flex justify-end space-x-3">
+            <div class="px-6
+                                    py-4 flex justify-end space-x-3">
                 <button type="button" @click="showViewModal = false"
                     class="border rounded-md px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
                     Close

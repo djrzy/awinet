@@ -30,9 +30,9 @@ class Customer extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function internet_plan()
+    public function services()
     {
-        return $this->hasOne(InternetPlan::class);
+        return $this->hasMany(CustomerService::class);
     }
 
     #[Override]

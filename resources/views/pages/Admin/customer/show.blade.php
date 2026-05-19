@@ -84,15 +84,7 @@
 
         {{-- SERVICES --}}
         <div x-show="tab === 'services'" class="bg-white rounded-lg shadow p-6">
-
-            <h2 class="text-lg font-semibold mb-4">
-                Internet Services
-            </h2>
-
-            <p class="text-gray-500">
-                No services yet.
-            </p>
-
+            @livewire('admin.customer.customer-internet-services', ['customer' => $customer])
         </div>
 
         {{-- INVOICES --}}

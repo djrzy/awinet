@@ -125,7 +125,8 @@ class InternetPlan extends Component
     {
         $plan->delete();
 
-        session()->flash('message', 'Internet plan deleted successfully.');
+        $this->dispatch('internet-plan-deleted');
+        // session()->flash('message', 'Internet plan deleted successfully.');
     }
 
     public function render()
