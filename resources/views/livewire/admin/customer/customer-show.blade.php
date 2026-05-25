@@ -11,8 +11,6 @@
             <div x-show="actionOpen" @click.away="actionOpen = false"
                 class="absolute bg-white overflow-hidden *:px-4 *:py-2 shadow-md text-sm rounded-md w-[160%] right-2 z-20 *:hover:bg-primary *:hover:text-white">
                 <a href="#" class="block">Disable User Login</a>
-                <a href="#" class="block">Suspend Internet Connection</a>
-                <a href="#" class="block">Activate Internet Connection</a>
             </div>
         </div>
         <div>

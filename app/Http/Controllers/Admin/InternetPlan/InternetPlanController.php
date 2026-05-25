@@ -11,4 +11,9 @@ class InternetPlanController extends Controller
     {
         return view('pages.admin.internet-plan.index');
     }
+
+    public function assign()
+    {
+        return view('pages.admin.internet-plan.assign');
+    }
 }

@@ -350,6 +350,16 @@
             <a href="#" class="sidebar-menu">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
+                        search_activity
+                    </span>
+                    Activity Log
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="sidebar-menu">
+                <span class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[22px]!">
                         folder_open
                     </span>
                     Administration
