@@ -1,7 +1,14 @@
-<div>
-    <h2 class="text-lg font-semibold mb-4">
-        Internet Services
-    </h2>
+<div x-data="toast" x-on:notify.window="showToast($event)">
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold">
+            Internet Services
+        </h2>
+        <div>
+            <x-button type="button" wire:click="assign" variant="primary">
+                Assign Service
+            </x-button>
+        </div>
+    </div>
     <div class="overflow-x-auto">
         <table class="w-full text-sm text-left rounded-lg overflow-hidden">
             <thead class="bg-[#007E41] text-white">
@@ -75,12 +82,99 @@
                 @empty
                     <tr>
                         <td colspan="8" class="px-6 py-4 text-center">
-                            No internet plans found.
+                            No services registered.
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
+
+    {{-- Toast --}}
+    <x-toast />
+
+    {{-- Modal --}}
+    <x-modal show="showModal" maxWidth="xl" closeable=1>
+        <x-slot:header>
+            <h2 class="text-lg font-semibold">
+                {{ $isEdit ? 'View/Edit Internet Plan' : 'Assign Internet Plan' }}
+            </h2>
+            <p class="text-xs text-gray-500">
+                {{ $isEdit ? 'Complete information of selected internet plan' : 'Assign internet plan to customer' }}
+            </p>
+        </x-slot:header>
+
+        <form id="CreateUpdateForm" wire:submit.prevent="{{ $isEdit ? 'update' : 'save' }}"
+            class="pb-6 px-6 space-y-3 text-sm">
+            @if ($isEdit && $selectedPlan)
+                <div class="grid grid-cols-2 gap-4">
+
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase">
+                            Created At
+                        </p>
+
+                        <div class="px-3">
+                            {{ $selectedPlan->created_at?->format('d M Y H:i') }}
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase">
+                            Updated At
+                        </p>
+
+                        <div class="px-3">
+                            {{ $selectedPlan->updated_at?->format('d M Y H:i') }}
+                        </div>
+                    </div>
+
+                </div>
+            @endif
+
+            <x-form.input-group type="text" name="service_name" wire:model="service_name" />
+            <x-form.input-group type="text" name="username" wire:model="username" />
+            <x-form.input-group type="password" name="password" wire:model="password" />
+            <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id">
+                <option value="">
+                    Select Internet Plan
+                </option>
+
+                @foreach ($this->internetPlans() as $id => $name)
+                    <option value="{{ $id }}">
+                        {{ $name }}
+                    </option>
+                @endforeach
+            </x-form.select>
+
+            @if ($isEdit)
+                <x-form.select name="status" wire:model.live="status">
+                    <option value="1">
+                        Active
+                    </option>
+
+                    <option value="0">
+                        Inactive
+                    </option>
+                </x-form.select>
+            @endif
+
+            <x-form.textarea name="installation_address" wire:model="installation_address" rows="3"
+                class="resize-none" />
+        </form>
+
+        <x-slot:footer>
+            <x-button type="button" variant="secondary" wire:click="closeModal"
+                loadingTarget="{{ $isEdit ? 'update' : 'save' }}">
+                Cancel
+            </x-button>
+
+            <x-button type="submit" variant="primary" form="CreateUpdateForm"
+                loadingTarget="{{ $isEdit ? 'update' : 'save' }}"
+                loadingText="{{ $isEdit ? 'Updating...' : 'Saving...' }}">
+                {{ $isEdit ? 'Update' : 'Save' }}
+            </x-button>
+        </x-slot:footer>
+    </x-modal>
 
 </div>

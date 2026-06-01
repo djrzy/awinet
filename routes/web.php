@@ -23,8 +23,8 @@ Route::get('/customer', function () {
 
 Route::get('/customer/add', function () {
     return view('pages.admin.customer.create');
-})->middleware(['auth'])->name('customer_add');
+})->middleware(['auth'])->name('customer.add');
 
 Route::get('/customer/{customer}', [CustomerController::class, 'show'])->middleware('auth')->name('admin.customers.show');
 
-Route::get('/internet-plan', [InternetPlanController::class, 'show'])->middleware('auth')->name('internet_plans');
+Route::get('/plan/internet', [InternetPlanController::class, 'show'])->middleware('auth')->name('plan.internet');

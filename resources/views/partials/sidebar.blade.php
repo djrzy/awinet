@@ -15,7 +15,7 @@
             open: {{ request()->routeIs('customer*') ? 'true' : 'false' }}
         }" @click.away="open = false">
             <button @click="open = !open"
-                class="sidebar-menu h-9 {{ request()->routeIs('customer*') ? 'bg-[#F14F10] font-semibold' : '' }}"
+                class="sidebar-menu h-9 {{ request()->routeIs('customer*') ? 'bg-secondary font-semibold' : '' }}"
                 :class="{ 'font-semibold': open }">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
@@ -36,10 +36,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('customer_add') }}"
-                        class="hover:text-white hover:bg-white/30 pl-12.5 flex justify-between items-center h-9 {{ request()->routeIs('customerAdd') ? 'font-semibold' : '' }}">
+                    <a href="{{ route('customer.add') }}"
+                        class="hover:text-white hover:bg-white/30 pl-12.5 flex justify-between items-center h-9 {{ request()->routeIs('customer.add') ? 'font-semibold' : '' }}">
                         Add
-                        {!! request()->routeIs('customerAdd') ? '<div class="w-1 h-9 bg-[#F14F10]"></div>' : '' !!}
+                        {!! request()->routeIs('customer.add') ? '<div class="w-1 h-9 bg-[#F14F10]"></div>' : '' !!}
                     </a>
                 </li>
                 <li>
@@ -323,8 +323,12 @@
                 </li>
             </ul>
         </li>
-        <li x-data="{ open: false }" @click.away="open = false">
-            <button @click="open = !open" class="sidebar-menu" :class="{ 'font-bold': open }">
+        <li x-data="{
+            open: {{ request()->routeIs('plan*') ? 'true' : 'false' }}
+        }" @click.away="open = false">
+            <button @click="open = !open"
+                class="sidebar-menu {{ request()->routeIs('plan.*') ? 'bg-secondary' : '' }}"
+                :class="{ 'font-semibold': open }">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
                         paid
@@ -338,8 +342,8 @@
             </button>
             <ul x-show="open" x-collapse x-cloak class="text-sm space-y-0">
                 <li>
-                    <a href="{{ route('internet_plans') }}"
-                        class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
+                    <a href="{{ route('plan.internet') }}"
+                        class="block py-2 hover:text-white hover:bg-white/30 pl-12.5 {{ request()->routeIs('plan.internet') ? 'font-semibold' : '' }}">
                         Internet
                     </a>
                 </li>

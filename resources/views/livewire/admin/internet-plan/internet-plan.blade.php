@@ -21,7 +21,7 @@
     </div>
 
     {{-- Create Edit Modal --}}
-    <x-modal show="showModal" maxWidth="2xl" closeable=1>
+    <x-modal show="showModal" maxWidth="xl" closeable=1>
         <x-slot:header>
             <h2 class="text-lg font-semibold">
                 {{ $isEdit ? 'View/Edit Internet Plan' : 'Add Internet Plan' }}
@@ -105,7 +105,7 @@
     </x-modal>
 
     {{-- Delete Modal --}}
-    <x-modal show="showDeleteModal" maxWidth="md" closeable=0>
+    <x-modal show="showDeleteModal" maxWidth="lg" closeable=0>
         <x-slot:header>
             <div class="flex items-center gap-3">
                 <div>
@@ -168,14 +168,14 @@
                         <td class="px-6 py-4">
                             <div class="flex gap-3">
                                 <button type="button" wire:click="viewEdit({{ $plan->id }})"
-                                    class="text-gray-400 hover:text-cyan-600 cursor-pointer">
+                                    title="View/Edit Plan" class="text-gray-400 hover:text-cyan-600 cursor-pointer">
                                     <span class="material-symbols-outlined">
                                         visibility
                                     </span>
                                 </button>
 
                                 <button type="button" wire:click="confirmDelete({{ $plan->id }})"
-                                    class="text-gray-400 hover:text-red-500 cursor-pointer">
+                                    title="Delete Plan" class="text-gray-400 hover:text-red-500 cursor-pointer">
                                     <span class="material-symbols-outlined">
                                         delete
                                     </span>

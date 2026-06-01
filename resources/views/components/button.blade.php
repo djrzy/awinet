@@ -9,7 +9,7 @@
     {{ $attributes->class([
         'rounded-md',
         'px-4',
-        'py-2',
+        'py-1',
         'transition',
         'cursor-pointer',
     
