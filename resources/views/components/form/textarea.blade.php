@@ -1,12 +1,12 @@
 @props(['name', 'label' => null])
 
-<div class="flex items-start gap-4">
+<div class="flex flex-col lg:flex-row items-start lg:gap-4">
 
-    <label for="{{ $name }}" class="w-[30%] text-right pt-2">
+    <label for="{{ $name }}" class="lg:w-[30%] text-right pt-2 text-gray-500">
         {{ $label ?? str($name)->headline() }}
     </label>
 
-    <div class="w-[70%]">
+    <div class="w-full lg:w-[70%]">
 
         <textarea id="{{ $name }}"
             {{ $attributes->class([

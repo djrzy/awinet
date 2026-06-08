@@ -57,11 +57,6 @@ class InternetPlan extends Component
         ];
     }
 
-    public function updatedPerPage(): void
-    {
-        $this->resetPage();
-    }
-
     protected function resetForm(): void
     {
         $this->reset([
@@ -74,6 +69,11 @@ class InternetPlan extends Component
             'status',
             'selectedPlan',
         ]);
+    }
+
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
     }
 
     public function closeModal(): void

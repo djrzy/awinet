@@ -3,6 +3,8 @@ import "./bootstrap";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+import mapPicker from "./components/map-picker";
+
 window.L = L;
 
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -41,4 +43,6 @@ document.addEventListener("alpine:init", () => {
             }, 3000);
         },
     }));
+
+    Alpine.data("mapPicker", mapPicker);
 });

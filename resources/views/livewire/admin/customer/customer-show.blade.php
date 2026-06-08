@@ -44,110 +44,27 @@
                         General Information
                     </h1>
 
-                    <div class="space-y-3 px-4 text-sm mt-6">
+                    <div class="space-y-3 lg:px-4 text-sm mt-6">
 
                         {{-- NAME --}}
-                        <div class="w-full flex flex-col lg:items-center">
-
-                            <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
-
-                                <label for="name" class="lg:w-[20%] lg:text-right">
-                                    Name
-                                </label>
-
-                                <input type="text" id="name" wire:model.defer="name"
-                                    class="border border-black/20 w-full lg:w-[80%] py-1 px-2 rounded-sm focus:outline-none focus:ring-primary focus:ring-2 @error('name') ring-red-500 ring-1 @enderror">
-
-                                @error('name')
-                                    <div class="absolute translate-y-1/2 bottom-[30%] lg:bottom-1/2 right-2">
-                                        <span class="material-symbols-outlined text-red-600! text-lg!">
-                                            report
-                                        </span>
-                                    </div>
-                                @enderror
-
-                            </div>
-
-                            @error('name')
-                                <div class="text-end w-full text-xs text-red-500 mt-1">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                        </div>
+                        <x-form.input-group name="name" label="Name" wire:model.defer="name" />
 
                         {{-- EMAIL --}}
-                        <div class="w-full flex flex-col lg:items-center">
 
-                            <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
-
-                                <label for="email" class="lg:w-[20%] lg:text-right">
-                                    Email
-                                </label>
-
-                                <input type="email" id="email" wire:model.defer="email"
-                                    class="border border-black/20 w-full lg:w-[80%] py-1 px-2 rounded-sm focus:outline-none focus:ring-primary focus:ring-2 @error('email') ring-red-500 ring-1 @enderror">
-
-                            </div>
-
-                            @error('email')
-                                <div class="text-end w-full text-xs text-red-500 mt-1">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                        </div>
+                        <x-form.input-group name="email" label="Email" type="email" wire:model.defer="email" />
 
                         {{-- PHONE --}}
-                        <div class="w-full flex flex-col lg:items-center">
-
-                            <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
-
-                                <label for="phone" class="lg:w-[20%] lg:text-right">
-                                    Phone
-                                </label>
-
-                                <input type="text" id="phone" wire:model.defer="phone"
-                                    class="border border-black/20 w-full lg:w-[80%] py-1 px-2 rounded-sm focus:outline-none focus:ring-primary focus:ring-2">
-
-                            </div>
-
-                        </div>
+                        <x-form.input-group name="phone" label="Phone" wire:model.defer="phone" />
 
                         {{-- NIK --}}
-                        <div class="w-full flex flex-col lg:items-center">
-
-                            <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
-
-                                <label for="nik" class="lg:w-[20%] lg:text-right">
-                                    NIK
-                                </label>
-
-                                <input type="text" id="nik" wire:model.defer="nik"
-                                    class="border border-black/20 w-full lg:w-[80%] py-1 px-2 rounded-sm focus:outline-none focus:ring-primary focus:ring-2">
-
-                            </div>
-
-                        </div>
+                        <x-form.input-group name="nik" label="NIK" wire:model.defer="nik" />
 
                         {{-- ADDRESS --}}
-                        <div class="w-full flex flex-col lg:items-center">
-
-                            <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
-
-                                <label for="address" class="lg:w-[20%] lg:text-right">
-                                    Address
-                                </label>
-
-                                <textarea id="address" rows="5" wire:model.defer="address"
-                                    class="border border-black/20 w-full lg:w-[80%] py-1 px-2 rounded-sm focus:outline-none focus:ring-primary focus:ring-2"></textarea>
-
-                            </div>
-
-                        </div>
+                        <x-form.textarea name="address" label="Address" wire:model.defer="address" rows="4"
+                            class="resize-none" />
 
                         {{-- POSTAL CODE --}}
-                        <div class="w-full flex flex-col lg:items-center">
+                        {{-- <div class="w-full flex flex-col lg:items-center">
 
                             <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
 
@@ -160,7 +77,8 @@
 
                             </div>
 
-                        </div>
+                        </div> --}}
+                        <x-form.input-group name="postal_code" label="Postal Code" wire:model.defer="postal_code" />
 
                     </div>
 
@@ -173,10 +91,17 @@
                         Location Based On Maps
                     </h1>
 
-                    <div wire:ignore x-data="mapPicker()" x-init="initMap()" class="space-y-2 w-full">
+                    <div wire:ignore x-data="mapPicker({
 
-                        <div x-ref="map" class="h-90 rounded-md w-full bg-gray-100">
-                        </div>
+                        id: 'customer-map',
+
+                        lat: @entangle('latitude'),
+                        lng: @entangle('longitude'),
+
+                        zoom: 17
+                    })" x-init="init()" class="space-y-2 w-full">
+
+                        <div x-ref="map" class="h-90 rounded-md w-full bg-gray-100"></div>
 
                         <input type="hidden" wire:model="latitude" x-model="lat">
 
@@ -238,11 +163,10 @@
 
             {{-- SUCCESS TOAST --}}
             <div x-show="success" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="translate-x-full opacity-0"
-                x-transition:enter-end="translate-x-0 opacity-100"
+                x-transition:enter-start="translate-x-full opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
                 x-transition:leave="transition ease-in duration-300"
-                x-transition:leave-start="translate-x-0 opacity-100"
-                x-transition:leave-end="translate-x-full opacity-0" x-cloak class="fixed top-15 right-6 z-9999">
+                x-transition:leave-start="translate-x-0 opacity-100" x-transition:leave-end="translate-x-full opacity-0"
+                x-cloak class="fixed top-15 right-6 z-9999">
 
                 <div class="bg-white px-4 py-3 rounded-lg shadow-lg flex gap-3 items-center">
 
@@ -270,96 +194,3 @@
 
     </div>
 </div>
-
-@script
-    <script>
-        Alpine.data('mapPicker', () => ({
-
-            map: null,
-            marker: null,
-
-            lat: @entangle('latitude'),
-            lng: @entangle('longitude'),
-
-            defaultLat: @js($customer->latitude),
-            defaultLng: @js($customer->longitude),
-
-            defaultZoom: 17,
-
-            initMap() {
-
-                if (this.map) return;
-
-                const lat = this.defaultLat ?? -6.2;
-                const lng = this.defaultLng ?? 106.816666;
-
-                this.map = L.map(this.$refs.map).setView(
-                    [lat, lng],
-                    this.defaultZoom
-                );
-
-                L.tileLayer(
-                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                    }
-                ).addTo(this.map);
-
-                setTimeout(() => {
-                    this.map.invalidateSize();
-                }, 100);
-
-                if (this.defaultLat && this.defaultLng) {
-
-                    this.createOrUpdateMarker(
-                        this.defaultLat,
-                        this.defaultLng
-                    );
-                }
-
-                this.map.on('click', (e) => {
-
-                    this.updateCoordinate(
-                        e.latlng.lat,
-                        e.latlng.lng
-                    );
-                });
-            },
-
-            updateCoordinate(lat, lng) {
-
-                this.lat = lat;
-                this.lng = lng;
-
-                this.createOrUpdateMarker(lat, lng);
-
-                this.map.panTo([lat, lng]);
-            },
-
-            createOrUpdateMarker(lat, lng) {
-
-                if (!this.marker) {
-
-                    this.marker = L.marker(
-                        [lat, lng], {
-                            draggable: true
-                        }
-                    ).addTo(this.map);
-
-                    this.marker.on('dragend', (e) => {
-
-                        const position = e.target.getLatLng();
-
-                        this.updateCoordinate(
-                            position.lat,
-                            position.lng
-                        );
-                    });
-
-                } else {
-
-                    this.marker.setLatLng([lat, lng]);
-                }
-            }
-        }))
-    </script>
-@endscript

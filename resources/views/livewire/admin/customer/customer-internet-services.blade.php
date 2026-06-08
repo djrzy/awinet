@@ -43,39 +43,53 @@
                                     class="bg-gray-400 rounded-sm px-4 py-1 font-semibold uppercase">{{ $service->status }}</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($service->activation_date)->format('d F Y') }}
-                        </td>
+                        <td class="px-6 py-4">{{ $service->activation_date }}</td>
                         <td class="px-6 py-4">
                             <div class="flex gap-3">
-                                <button type="button" wire:click="viewEdit({{ $service->id }})" title="View Details"
-                                    class="text-gray-400 hover:text-cyan-600 cursor-pointer">
-                                    <span class="material-symbols-outlined">
-                                        visibility
+                                <button type="button" wire:click="viewEdit({{ $service->id }})"
+                                    title="View/Edit Details" class="text-gray-400 hover:text-cyan-500 cursor-pointer">
+                                    <span class="material-symbols-outlined text-xl!">
+                                        edit_square
+                                    </span>
+                                </button>
+
+                                <button type="button" wire:click="changePlan({{ $service->id }})" title="Change Plan"
+                                    class="text-gray-400 hover:text-sky-500 cursor-pointer">
+                                    <span class="material-symbols-outlined text-xl!">
+                                        sync
                                     </span>
                                 </button>
 
                                 @if ($service->status === 'pending' || $service->status === 'suspended')
-                                    <button type="button" wire:click=""
+                                    <button type="button" wire:click="serviceStatus({{ $service->id }},'activate')"
+                                        title="Activate Service"
                                         class="text-gray-400 hover:text-green-500 cursor-pointer">
-                                        <span class="material-symbols-outlined">
+                                        <span class="material-symbols-outlined text-xl!">
                                             power
                                         </span>
                                     </button>
                                 @elseif ($service->status === 'active')
-                                    <button type="button" wire:click=""
-                                        class="text-gray-400 hover:text-red-500 cursor-pointer">
-                                        <span class="material-symbols-outlined">
+                                    <button type="button" wire:click="serviceStatus({{ $service->id }},'suspend')"
+                                        title="Suspend Service" class="text-gray-400 hover:text-red-500 cursor-pointer">
+                                        <span class="material-symbols-outlined text-xl!">
                                             power_off
                                         </span>
                                     </button>
                                 @endif
 
-                                <button type="button" wire:click="confirmDelete({{ $service->id }})"
+                                <button type="button" wire:click="routerSettings({{ $service->id }})"
+                                    title="Router Settings" class="text-gray-400 hover:text-teal-500 cursor-pointer">
+                                    <span class="material-symbols-outlined text-xl!">
+                                        settings
+                                    </span>
+                                </button>
+
+                                {{-- <button type="button" wire:click="confirmDelete({{ $service->id }})"
                                     class="text-gray-400 hover:text-red-500 cursor-pointer">
                                     <span class="material-symbols-outlined">
                                         delete
                                     </span>
-                                </button>
+                                </button> --}}
                             </div>
                         </td>
                     </tr>
@@ -94,86 +108,245 @@
     <x-toast />
 
     {{-- Modal --}}
-    <x-modal show="showModal" maxWidth="xl" closeable=1>
+    <x-modal show="showModal" maxWidth="xl" closeable=0>
         <x-slot:header>
             <h2 class="text-lg font-semibold">
-                {{ $isEdit ? 'View/Edit Internet Plan' : 'Assign Internet Plan' }}
+                {{ $isEdit ? 'View/Edit Customer Service' : 'Assign Internet Plan' }}
             </h2>
             <p class="text-xs text-gray-500">
-                {{ $isEdit ? 'Complete information of selected internet plan' : 'Assign internet plan to customer' }}
+                {{ $isEdit ? 'Complete information of customer internet service' : 'Assign internet plan to customer' }}
             </p>
         </x-slot:header>
 
-        <form id="CreateUpdateForm" wire:submit.prevent="{{ $isEdit ? 'update' : 'save' }}"
-            class="pb-6 px-6 space-y-3 text-sm">
-            @if ($isEdit && $selectedPlan)
-                <div class="grid grid-cols-2 gap-4">
+        @if ($modalMode === 'assign')
+            <form id="CreateServiceForm" wire:submit.prevent="{{ $isEdit ? 'update' : 'save' }}"
+                class="px-1 lg:px-6 space-y-3 text-sm" x-data="{
+                    similarAddress: @entangle('similar_address')
+                }">
 
-                    <div class="space-y-1">
-                        <p class="text-gray-500 text-xs uppercase">
-                            Created At
-                        </p>
+                <x-form.input-group type="text" name="service_name" wire:model="service_name" />
+                <x-form.input-group type="text" name="username" wire:model="username" />
+                <x-form.input-group type="password" name="password" wire:model="password" />
+                <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id">
+                    <option value="">
+                        Select Internet Plan
+                    </option>
 
-                        <div class="px-3">
-                            {{ $selectedPlan->created_at?->format('d M Y H:i') }}
-                        </div>
-                    </div>
+                    @foreach ($internetPlans as $id => $name)
+                        <option value="{{ $id }}">
+                            {{ $name }}
+                        </option>
+                    @endforeach
+                </x-form.select>
 
-                    <div class="space-y-1">
-                        <p class="text-gray-500 text-xs uppercase">
-                            Updated At
-                        </p>
+                <x-form.radio-button name="similar_address" wire:model.live="similar_address" label="Address"
+                    direction="vertical" :options="[
+                        1 => 'Use Customer Address',
+                        0 => 'Different Installation Address',
+                    ]" />
 
-                        <div class="px-3">
-                            {{ $selectedPlan->updated_at?->format('d M Y H:i') }}
+                <div x-show="similarAddress == '0'" x-cloak>
+
+                    <x-form.textarea name="installation_address" wire:model="installation_address" rows="3"
+                        class="resize-none" />
+
+                    <div class="w-full relative flex flex-col lg:flex-row lg:gap-4 mt-3">
+                        <label for="postal_code" class="lg:w-[30%] lg:text-right">Location Base On Map</label>
+                        <div wire:ignore x-data="mapPicker({
+
+                            id: 'create-service-map',
+
+                            lat: @entangle('latitude'),
+                            lng: @entangle('longitude'),
+
+                            zoom: 17
+                        })" x-init="init()"
+                            class="space-y-2 w-full lg:w-[70%]">
+
+                            <div x-ref="map" class="h-70 rounded-md w-full bg-gray-100"></div>
+
+                            <input type="hidden" wire:model="latitude" x-model="lat">
+
+                            <input type="hidden" wire:model="longitude" x-model="lng">
+
                         </div>
                     </div>
 
                 </div>
-            @endif
 
-            <x-form.input-group type="text" name="service_name" wire:model="service_name" />
-            <x-form.input-group type="text" name="username" wire:model="username" />
-            <x-form.input-group type="password" name="password" wire:model="password" />
-            <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id">
-                <option value="">
-                    Select Internet Plan
-                </option>
+            </form>
+        @endif
 
-                @foreach ($this->internetPlans() as $id => $name)
-                    <option value="{{ $id }}">
-                        {{ $name }}
-                    </option>
-                @endforeach
-            </x-form.select>
+        @if ($modalMode === 'view-edit')
+            <form id="CreateServiceForm" wire:submit.prevent="{{ $isEdit ? 'update' : 'save' }}"
+                class="px-1 lg:px-6 space-y-3 text-sm" x-data="{
+                    similarAddress: @entangle('similar_address')
+                }">
 
-            @if ($isEdit)
-                <x-form.select name="status" wire:model.live="status">
-                    <option value="1">
-                        Active
+                <x-form.input-group type="text" name="service_name" wire:model="service_name" />
+                <x-form.input-group type="text" name="username" wire:model="username" />
+                <x-form.input-group type="password" name="password" wire:model="password" />
+                <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id">
+                    <option value="">
+                        Select Internet Plan
                     </option>
 
-                    <option value="0">
-                        Inactive
+                    @foreach ($internetPlans as $id => $name)
+                        <option value="{{ $id }}">
+                            {{ $name }}
+                        </option>
+                    @endforeach
+                </x-form.select>
+
+                <x-form.radio-button name="similar_address" wire:model.live="similar_address" label="Address"
+                    direction="vertical" :options="[
+                        1 => 'Use Customer Address',
+                        0 => 'Different Installation Address',
+                    ]" />
+
+                <div x-show="similarAddress == '0'" x-cloak>
+
+                    <x-form.textarea name="installation_address" wire:model="installation_address" rows="3"
+                        class="resize-none" />
+
+                    <div class="w-full relative flex flex-col lg:flex-row lg:gap-4 mt-3">
+                        <label for="postal_code" class="lg:w-[30%] lg:text-right">Location Base On Map</label>
+                        <div wire:ignore x-data="mapPicker({
+
+                            id: 'create-service-map',
+
+                            lat: @entangle('latitude'),
+                            lng: @entangle('longitude'),
+
+                            zoom: 17
+                        })" x-init="init()"
+                            class="space-y-2 w-full lg:w-[70%]">
+
+                            <div x-ref="map" class="h-70 rounded-md w-full bg-gray-100"></div>
+
+                            <input type="hidden" wire:model="latitude" x-model="lat">
+
+                            <input type="hidden" wire:model="longitude" x-model="lng">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        @endif
+
+        @if ($modalMode === 'change-plan')
+
+            <div class="px-6 py-4 space-y-4">
+
+                <div>
+                    <p class="text-xs text-gray-500">
+                        Current Plan
+                    </p>
+
+                    <div class="font-medium">
+                        {{ $selectedService?->internet_plan?->name }}
+                    </div>
+                </div>
+
+                <x-form.select name="internet_plan_id" label="New Internet Plan" wire:model="internet_plan_id">
+                    <option value="">
+                        Select Plan
+                    </option>
+
+                    @foreach ($internetPlans as $id => $name)
+                        <option value="{{ $id }}">
+                            {{ $name }}
+                        </option>
+                    @endforeach
+
+                </x-form.select>
+
+            </div>
+
+        @endif
+
+        @if ($modalMode === 'service-status')
+            <div class="px-2 space-y-4">
+
+                <div>
+                    <p class="text-sm text-gray-500">
+                        Service
+                    </p>
+
+                    <div class="font-semibold">
+                        {{ $selectedService?->service_name }}
+                    </div>
+                </div>
+
+                <div class="rounded-lg bg-yellow-50 p-4">
+
+                    Are you sure want to
+
+                    <span class="font-semibold capitalize">
+                        {{ $statusAction }}
+                    </span>
+
+                    this service?
+
+                </div>
+
+            </div>
+        @endif
+
+        @if ($modalMode === 'router-settings')
+            <div>
+
+                <x-form.select name="router_id" label="Router" wire:model="router_id">
+                    <option value="">
+                        Select Router
                     </option>
                 </x-form.select>
-            @endif
 
-            <x-form.textarea name="installation_address" wire:model="installation_address" rows="3"
-                class="resize-none" />
-        </form>
+            </div>
+        @endif
 
-        <x-slot:footer>
+        {{-- <x-slot:footer>
             <x-button type="button" variant="secondary" wire:click="closeModal"
                 loadingTarget="{{ $isEdit ? 'update' : 'save' }}">
                 Cancel
             </x-button>
 
-            <x-button type="submit" variant="primary" form="CreateUpdateForm"
+            <x-button type="submit" variant="primary" form="CreateServiceForm"
                 loadingTarget="{{ $isEdit ? 'update' : 'save' }}"
                 loadingText="{{ $isEdit ? 'Updating...' : 'Saving...' }}">
                 {{ $isEdit ? 'Update' : 'Save' }}
             </x-button>
+        </x-slot:footer> --}}
+        <x-slot:footer>
+
+            <x-button type="button" variant="secondary" wire:click="closeModal">
+                Cancel
+            </x-button>
+
+            @if ($modalMode === 'assign')
+                <x-button type="submit" form="CreateServiceForm">
+                    Save
+                </x-button>
+            @elseif($modalMode === 'view-edit')
+                <x-button type="submit" form="CreateServiceForm">
+                    Update
+                </x-button>
+            @elseif($modalMode === 'change-plan')
+                <x-button>
+                    Change Plan
+                </x-button>
+            @elseif($modalMode === 'service-status')
+                <x-button>
+                    Confirm
+                </x-button>
+            @elseif($modalMode === 'router-settings')
+                <x-button>
+                    Save Settings
+                </x-button>
+            @endif
+
         </x-slot:footer>
     </x-modal>
 

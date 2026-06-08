@@ -1,6 +1,6 @@
 @props(['show', 'maxWidth' => '2xl', 'closeable' => true])
 
-<div x-show="$wire.{{ $show }}" x-transition x-cloak class="fixed inset-0 z-50 overflow-y-auto">
+<div x-show="$wire.{{ $show }}" x-transition x-cloak class="fixed inset-0 z-50">
 
     {{-- Overlay --}}
     <div class="fixed inset-0 bg-black/40"></div>
@@ -36,7 +36,7 @@
             @endisset
 
             {{-- Body --}}
-            <div class="px-6">
+            <div class="px-6 pt-1 overflow-y-auto max-h-[35vh]">
                 {{ $slot }}
             </div>
 

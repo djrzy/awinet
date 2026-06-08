@@ -135,16 +135,23 @@
             <div class="w-full flex flex-col lg:items-center">
                 <div class="w-full relative flex flex-col lg:flex-row lg:gap-3">
                     <label for="postal_code" class="lg:w-[15%] lg:text-right">Location Base On Map</label>
-                    <div wire:ignore x-data="mapPicker()" x-init="initMap()"
-                        class="space-y-2 w-full lg:w-[85%] ">
+                    <div wire:ignore x-data="mapPicker({
 
-                        <div id="map" class="h-100 rounded-md w-full"></div>
+                        id: 'create-customer-map',
 
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="hidden" wire:model="latitude" x-model="lat" class="border p-2">
+                        lat: @entangle('latitude'),
+                        lng: @entangle('longitude'),
 
-                            <input type="hidden" wire:model="longitude" x-model="lng" class="border p-2">
-                        </div>
+                        zoom: 17
+                    })" x-init="init()"
+                        class="space-y-2 w-full lg:w-[85%]">
+
+                        <div x-ref="map" class="h-90 rounded-md w-full bg-gray-100"></div>
+
+                        <input type="hidden" wire:model="latitude" x-model="lat">
+
+                        <input type="hidden" wire:model="longitude" x-model="lng">
+
                     </div>
                 </div>
             </div>
@@ -204,7 +211,7 @@
     </div>
 </div>
 
-@script
+{{-- @script
     <script>
         Alpine.data('mapPicker', () => ({
             map: null,
@@ -294,4 +301,4 @@
             }
         }))
     </script>
-@endscript
+@endscript --}}

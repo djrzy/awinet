@@ -9,6 +9,7 @@ class CustomerService extends Model
     protected $fillable = [
         'tenant_id',
         'customer_id',
+        'service_name',
         'internet_plan_id',
         'username',
         'password',
@@ -16,7 +17,10 @@ class CustomerService extends Model
         'activation_date',
         'expiration_date',
         'deactivation_date',
-        'router_id'
+        'router_id',
+        'installation_address',
+        'latitude',
+        'longitude',
     ];
 
     public function customer()
