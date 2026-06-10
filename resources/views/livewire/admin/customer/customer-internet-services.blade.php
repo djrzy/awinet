@@ -46,8 +46,8 @@
                         <td class="px-6 py-4">{{ $service->activation_date }}</td>
                         <td class="px-6 py-4">
                             <div class="flex gap-3">
-                                <button type="button" wire:click="viewEdit({{ $service->id }})"
-                                    title="View/Edit Details" class="text-gray-400 hover:text-cyan-500 cursor-pointer">
+                                <button type="button" wire:click="viewEdit({{ $service->id }})" title="View Details"
+                                    class="text-gray-400 hover:text-cyan-500 cursor-pointer">
                                     <span class="material-symbols-outlined text-xl!">
                                         edit_square
                                     </span>
@@ -110,12 +110,50 @@
     {{-- Modal --}}
     <x-modal show="showModal" maxWidth="xl" closeable=0>
         <x-slot:header>
-            <h2 class="text-lg font-semibold">
-                {{ $isEdit ? 'View/Edit Customer Service' : 'Assign Internet Plan' }}
-            </h2>
-            <p class="text-xs text-gray-500">
-                {{ $isEdit ? 'Complete information of customer internet service' : 'Assign internet plan to customer' }}
-            </p>
+            @if ($modalMode === 'assign')
+                <h2 class="text-lg font-semibold">
+                    Assign Internet Plan
+                </h2>
+                <p class="text-xs text-gray-500">
+                    Assign internet plan to customer
+                </p>
+            @endif
+
+            @if ($modalMode === 'view-edit')
+                <h2 class="text-lg font-semibold">
+                    View Customer Service
+                </h2>
+                <p class="text-xs text-gray-500">
+                    Complete information of customer internet service
+                </p>
+            @endif
+
+            @if ($modalMode === 'change-plan')
+                <h2 class="text-lg font-semibold">
+                    Change Internet Plan
+                </h2>
+                <p class="text-xs text-gray-500">
+                    Change current customer internet plan
+                </p>
+            @endif
+
+            @if ($modalMode === 'service-status')
+                <h2 class="text-lg font-semibold">
+                    Change Service Status
+                </h2>
+                <p class="text-xs text-gray-500">
+                    Update the service status for this customer
+                </p>
+            @endif
+
+            @if ($modalMode === 'router-settings')
+                <h2 class="text-lg font-semibold">
+                    Router Settings
+                </h2>
+                <p class="text-xs text-gray-500">
+                    Manage router settings for this customer
+                </p>
+            @endif
         </x-slot:header>
 
         @if ($modalMode === 'assign')
@@ -153,12 +191,12 @@
                     <div class="w-full relative flex flex-col lg:flex-row lg:gap-4 mt-3">
                         <label for="postal_code" class="lg:w-[30%] lg:text-right">Location Base On Map</label>
                         <div wire:ignore x-data="mapPicker({
-
+                        
                             id: 'create-service-map',
-
+                        
                             lat: @entangle('latitude'),
                             lng: @entangle('longitude'),
-
+                        
                             zoom: 17
                         })" x-init="init()"
                             class="space-y-2 w-full lg:w-[70%]">
@@ -183,14 +221,13 @@
                     similarAddress: @entangle('similar_address')
                 }">
 
-                <x-form.input-group type="text" name="service_name" wire:model="service_name" />
-                <x-form.input-group type="text" name="username" wire:model="username" />
-                <x-form.input-group type="password" name="password" wire:model="password" />
-                <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id">
-                    <option value="">
-                        Select Internet Plan
-                    </option>
-
+                <x-form.input-group name="Customer Code" type="text" :value="$customer->customer_code" class="bg-gray-100"
+                    disabled />
+                <x-form.input-group name="Name" type="text" :value="$customer->user->name" class="bg-gray-100" disabled />
+                <x-form.input-group type="text" name="service_name" wire:model="service_name" class="bg-gray-100"
+                    disabled />
+                <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id" disabled
+                    class="appearance-none bg-gray-100">
                     @foreach ($internetPlans as $id => $name)
                         <option value="{{ $id }}">
                             {{ $name }}
@@ -198,39 +235,26 @@
                     @endforeach
                 </x-form.select>
 
-                <x-form.radio-button name="similar_address" wire:model.live="similar_address" label="Address"
-                    direction="vertical" :options="[
-                        1 => 'Use Customer Address',
-                        0 => 'Different Installation Address',
-                    ]" />
+                <x-form.textarea name="installation_address" wire:model="installation_address" rows="3"
+                    class="resize-none bg-gray-100" disabled />
 
-                <div x-show="similarAddress == '0'" x-cloak>
-
-                    <x-form.textarea name="installation_address" wire:model="installation_address" rows="3"
-                        class="resize-none" />
-
-                    <div class="w-full relative flex flex-col lg:flex-row lg:gap-4 mt-3">
-                        <label for="postal_code" class="lg:w-[30%] lg:text-right">Location Base On Map</label>
-                        <div wire:ignore x-data="mapPicker({
-
-                            id: 'create-service-map',
-
-                            lat: @entangle('latitude'),
-                            lng: @entangle('longitude'),
-
-                            zoom: 17
-                        })" x-init="init()"
-                            class="space-y-2 w-full lg:w-[70%]">
-
-                            <div x-ref="map" class="h-70 rounded-md w-full bg-gray-100"></div>
-
-                            <input type="hidden" wire:model="latitude" x-model="lat">
-
-                            <input type="hidden" wire:model="longitude" x-model="lng">
-
-                        </div>
+                <div class="w-full relative flex flex-col lg:flex-row lg:gap-4 mt-3">
+                    <label for="postal_code" class="lg:w-[30%] lg:text-right">Location Base On Map</label>
+                    <div wire:ignore x-data="mapViewer({
+                        id: 'customer-map',
+                    
+                        zoom: 17,
+                    
+                        markers: [{
+                            lat: @js($latitude),
+                            lng: @js($longitude),
+                    
+                            popup: 'Customer location',
+                        }]
+                    })" x-init="init()"
+                        class="space-y-2 w-full lg:w-[70%]">
+                        <div x-ref="map" class="h-70 rounded-md w-full bg-gray-100"></div>
                     </div>
-
                 </div>
 
             </form>
@@ -238,14 +262,22 @@
 
         @if ($modalMode === 'change-plan')
 
-            <div class="px-6 py-4 space-y-4">
+            <div class="px-1 lg:px-6 space-y-3 text-sm">
 
+                <div>
+                    <p class="text-xs text-gray-400 italic">
+                        This action will change the customer's current internet plan to the new selected plan. Please
+                        review the information before confirming the change. And the changes will be applied in the next
+                        billing cycle.
+                    </p>
+
+                </div>
                 <div>
                     <p class="text-xs text-gray-500">
                         Current Plan
                     </p>
 
-                    <div class="font-medium">
+                    <div class="font-semibold">
                         {{ $selectedService?->internet_plan?->name }}
                     </div>
                 </div>
@@ -268,7 +300,7 @@
         @endif
 
         @if ($modalMode === 'service-status')
-            <div class="px-2 space-y-4">
+            <div class="px-1 lg:px-6 space-y-3 text-sm">
 
                 <div>
                     <p class="text-sm text-gray-500">
@@ -296,33 +328,23 @@
         @endif
 
         @if ($modalMode === 'router-settings')
-            <div>
+            <div class="px-1 lg:px-6 space-y-3 text-sm">
 
                 <x-form.select name="router_id" label="Router" wire:model="router_id">
                     <option value="">
                         Select Router
                     </option>
                 </x-form.select>
+                <x-form.input-group type="text" name="username" wire:model="username" />
+                <x-form.input-group type="password" name="password" wire:model="password" />
 
             </div>
         @endif
 
-        {{-- <x-slot:footer>
-            <x-button type="button" variant="secondary" wire:click="closeModal"
-                loadingTarget="{{ $isEdit ? 'update' : 'save' }}">
-                Cancel
-            </x-button>
-
-            <x-button type="submit" variant="primary" form="CreateServiceForm"
-                loadingTarget="{{ $isEdit ? 'update' : 'save' }}"
-                loadingText="{{ $isEdit ? 'Updating...' : 'Saving...' }}">
-                {{ $isEdit ? 'Update' : 'Save' }}
-            </x-button>
-        </x-slot:footer> --}}
         <x-slot:footer>
 
             <x-button type="button" variant="secondary" wire:click="closeModal">
-                Cancel
+                {{ $modalMode === 'view-edit' ? 'Close' : 'Cancel' }}
             </x-button>
 
             @if ($modalMode === 'assign')
@@ -330,9 +352,9 @@
                     Save
                 </x-button>
             @elseif($modalMode === 'view-edit')
-                <x-button type="submit" form="CreateServiceForm">
+                {{-- <x-button type="submit" form="CreateServiceForm">
                     Update
-                </x-button>
+                </x-button> --}}
             @elseif($modalMode === 'change-plan')
                 <x-button>
                     Change Plan

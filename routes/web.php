@@ -28,3 +28,9 @@ Route::get('/customer/add', function () {
 Route::get('/customer/{customer}', [CustomerController::class, 'show'])->middleware('auth')->name('admin.customers.show');
 
 Route::get('/plan/internet', [InternetPlanController::class, 'show'])->middleware('auth')->name('plan.internet');
+
+Route::get('/maps', function () {
+    $customers = \App\Models\Customer::with('services')->get();
+    // dd($customers);
+    return view('pages.admin.customer.maps', compact('customers'));
+})->name('customer.maps');

@@ -43,10 +43,17 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('customer.maps') }}"
+                        class="hover:text-white hover:bg-white/30 pl-12.5 flex justify-between items-center h-9 {{ request()->routeIs('customer.maps') ? 'font-semibold' : '' }}">
+                        Maps
+                        {!! request()->routeIs('customer.maps') ? '<div class="w-1 h-9 bg-[#F14F10]"></div>' : '' !!}
+                    </a>
+                </li>
+                {{-- <li>
                     <a href="#" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
                         Maps
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
         <li x-data="{ open: false }" @click.away="open = false">

@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import mapPicker from "./components/map-picker";
+import mapViewer from "./components/map-viewer";
 
 window.L = L;
 
@@ -45,4 +46,6 @@ document.addEventListener("alpine:init", () => {
     }));
 
     Alpine.data("mapPicker", mapPicker);
+
+    Alpine.data("mapViewer", mapViewer);
 });
