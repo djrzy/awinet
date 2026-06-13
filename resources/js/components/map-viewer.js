@@ -92,10 +92,12 @@ export default function mapViewer(config = {}) {
                     return;
                 }
 
-                const marker = L.marker([
-                    Number(markerData.lat),
-                    Number(markerData.lng),
-                ]).addTo(this.map);
+                const marker = L.marker(
+                    [Number(markerData.lat), Number(markerData.lng)],
+                    {
+                        icon: this.getMarkerIcon(markerData.status),
+                    },
+                ).addTo(this.map);
 
                 if (markerData.popup) {
                     marker.bindPopup(markerData.popup);
@@ -145,6 +147,29 @@ export default function mapViewer(config = {}) {
                 [Number(lat), Number(lng)],
                 zoom ?? this.options.zoom,
             );
+        },
+
+        getMarkerIcon(status) {
+            const markerColor = {
+                active: "green",
+                suspended: "red",
+                pending: "gold",
+                terminated: "grey",
+            };
+
+            const color = markerColor[status] ?? "blue";
+
+            return new L.Icon({
+                iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
+
+                shadowUrl:
+                    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+            });
         },
     };
 }

@@ -24,9 +24,9 @@
             <div class="w-full relative flex flex-col lg:flex-row lg:gap-4 mt-3">
                 <div wire:ignore x-data="mapViewer({
                     id: 'all-customer-map',
-                
+
                     zoom: 5,
-                
+
                     markers: @js(
     $customers
         ->flatMap(
@@ -35,17 +35,19 @@
                     'lat' => $service->latitude,
                     'lng' => $service->longitude,
 
-                    // 'popup' => view('admin.customers.partials.popup', [
-                    //     'customer' => $customer,
-                    //     'service' => $service,
-                    // ])->render(),
+                    'status' => $service->status,
+
+                    'popup' => view('partials.maps.marker.popup', [
+                        'customer' => $customer,
+                        'service' => $service,
+                    ])->render(),
                 ],
             ),
         )
         ->values(),
 )
                 })" x-init="init()" class="space-y-2 w-full">
-                    <div x-ref="map" class="h-90 rounded-md w-full bg-gray-100"></div>
+                    <div x-ref="map" class="h-150 rounded-md w-full bg-gray-100"></div>
                 </div>
             </div>
         </div>

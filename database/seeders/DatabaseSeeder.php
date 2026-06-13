@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RolePermissionSeeder::class,
             CustomerSeeder::class,
-            InternetPlanSeeder::class
+            InternetPlanSeeder::class,
+            PaymentMethodSeeder::class,
         ]);
 
         $user = User::factory()->create([
