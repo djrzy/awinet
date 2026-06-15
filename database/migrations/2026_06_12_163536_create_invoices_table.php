@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->ulid('uuid')->unique();
             $table->foreignId('tenant_id')->nullable();
-            $table->foreignId('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->foreignId('service_id')->references('id')->on('customer_services')->onDelete('cascade');
+            $table->foreignId('customer_id')->references('id')->on('customers');
+            $table->foreignId('service_id')->references('id')->on('customer_services');
             $table->char('billing_period', 7);
             $table->enum('billing_generation_type', ['system', 'manual'])->default('system');
             $table->string('invoice_number')->unique();

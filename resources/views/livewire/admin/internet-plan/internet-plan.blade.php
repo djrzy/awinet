@@ -1,5 +1,4 @@
-<div x-data="toast" x-on:notify.window="showToast($event)"
-    class="relative bg-neutral-primary-soft shadow-xs rounded-base p-2">
+<div x-data="toast" x-on:notify.window="showToast($event)" class="relative p-2">
 
     {{-- Header --}}
     <div class="mt-2 mb-2 flex flex-wrap justify-between items-center px-1 gap-3">

@@ -155,7 +155,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
+                    <a href="{{ route('invoice') }}" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
                         Invoices
                     </a>
                 </li>
@@ -377,7 +377,7 @@
                 </span>
             </a>
         </li>
-        <li>
+        {{-- <li>
             <a href="#" class="sidebar-menu">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
@@ -386,6 +386,34 @@
                     Config
                 </span>
             </a>
+        </li> --}}
+        <li x-data="{
+            open: {{ request()->routeIs('settings*') ? 'true' : 'false' }}
+        }" @click.away="open = false">
+            <button @click="open = !open"
+                class="sidebar-menu {{ request()->routeIs('settings.*') ? 'bg-secondary' : '' }}"
+                :class="{ 'font-semibold': open }">
+                <span class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[22px]!">
+                        settings
+                    </span>
+                    Setting
+                </span>
+                <span class="material-symbols-outlined transition-transform opacity-60"
+                    :class="{ 'rotate-180': open }">
+                    keyboard_arrow_down
+                </span>
+            </button>
+            <ul x-show="open" x-collapse x-cloak class="text-sm space-y-0">
+                <li>
+                    <a href="#"
+                        class="block py-2 hover:text-white hover:bg-white/30 pl-12.5
+                        {{-- {{ request()->routeIs('plan.internet') ? 'font-semibold' : '' }} --}}
+                         ">
+                        Billing Cycle
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 </aside>

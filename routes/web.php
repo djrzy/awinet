@@ -34,3 +34,7 @@ Route::get('/maps', function () {
     // dd($customers);
     return view('pages.admin.customer.maps', compact('customers'));
 })->name('customer.maps');
+
+Route::get('/invoice', function () {
+    return view('pages.admin.invoice.index');
+})->middleware(['auth'])->name('invoice');

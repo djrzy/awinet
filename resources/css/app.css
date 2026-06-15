@@ -66,6 +66,7 @@
         /* bg-[#007E41]; */
     }
 
+    /* Leaflet Map */
     .leaflet-container {
         z-index: 1;
     }
@@ -76,6 +77,60 @@
 
     .leaflet-pane {
         z-index: 1;
+    }
+
+    /* Flatpickr Calendar */
+    .flatpickr-calendar {
+        transform: scale(0.8);
+        transform-origin: top right;
+        font-size: 0.05rem;
+    }
+
+    .flatpickr-monthSelect-month {
+        height: 48px !important;
+        line-height: 48px !important;
+        padding: 0rem !important;
+        font-size: 1rem;
+    }
+
+    .flatpickr-monthSelect-months {
+        gap: 0.25rem;
+    }
+
+    .flatpickr-days {
+        width: auto !important;
+    }
+
+    /* selected month/date */
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-monthSelect-month.selected,
+    .flatpickr-monthSelect-month.startRange,
+    .flatpickr-monthSelect-month.endRange {
+        background: var(--color-primary) !important;
+        border-color: var(--color-primary) !important;
+        color: white !important;
+    }
+
+    /* range highlight */
+    /* .flatpickr-day.inRange,
+    .flatpickr-monthSelect-month.inRange {
+        background: #dbeafe !important;
+        border-color: #dbeafe !important;
+        color: #1e3a8a !important;
+    } */
+
+    /* hover */
+    /* .flatpickr-day:hover,
+    .flatpickr-monthSelect-month:hover {
+        background: #eff6ff !important;
+    } */
+
+    /* today */
+    .flatpickr-day.today,
+    .flatpickr-monthSelect-month.today {
+        border-color: var(--color-primary) !important;
     }
 
     /* footer {

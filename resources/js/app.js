@@ -3,6 +3,15 @@ import "./bootstrap";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+import flatpickr from "flatpickr";
+import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect";
+
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/plugins/monthSelect/style.css";
+
+window.flatpickr = flatpickr;
+window.monthSelectPlugin = monthSelectPlugin;
+
 import mapPicker from "./components/map-picker";
 import mapViewer from "./components/map-viewer";
 
