@@ -35,6 +35,11 @@ class Customer extends Model
         return $this->hasMany(CustomerService::class);
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     #[Override]
     public function getRouteKeyName(): string
     {

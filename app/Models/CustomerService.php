@@ -32,4 +32,9 @@ class CustomerService extends Model
     {
         return $this->belongsTo(InternetPlan::class);
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }
