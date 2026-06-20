@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreignId('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreignId('payment_method_id')->references('id')->on('payment_methods');
-            $table->decimal('amount', 15, 2);
-            $table->date('payment_date');
+            $table->decimal('amount', 15, 0);
+            $table->timestamp('payment_date');
             $table->string('reference_number')->nullable();
             $table->text('notes')->nullable();
             $table->enum('status', ['pending', 'completed', 'failed', 'expired', 'cancelled'])->default('pending');

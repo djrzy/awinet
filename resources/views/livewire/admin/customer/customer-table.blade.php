@@ -71,13 +71,14 @@
                         <td class="px-6 py-4">
                             {{ $customer->customer_code }}
                         </td>
-                        <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap flex items-center gap-2">
+                        <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap flex items-center gap-2">
                             <a href="{{ route('admin.customers.show', $customer) }}"
                                 class="hover:text-black/50">{{ $customer->user->name }}</a>
-                            <div class="bg-yellow-500 rounded-sm text-white px-1 py-0.5 text-[10px] font-semibold">
+                            <div
+                                class="bg-yellow-500 rounded-sm text-white px-1 py-0.5 text-[10px] font-semibold select-none">
                                 NEW
                             </div>
-                        </th>
+                        </td>
                         <td class="px-6 py-4">
                             {{ $customer->user->phone }}
                         </td>

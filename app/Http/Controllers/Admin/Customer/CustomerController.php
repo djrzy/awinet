@@ -10,7 +10,7 @@ class CustomerController extends Controller
 {
     public function show(Customer $customer)
     {
-        return view('pages.admin.customer.show', [
+        return view('pages.Admin.customer.show', [
             'customer' => $customer
         ]);
     }

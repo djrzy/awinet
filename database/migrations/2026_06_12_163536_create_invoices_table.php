@@ -20,13 +20,13 @@ return new class extends Migration
             $table->char('billing_period', 7);
             $table->enum('billing_generation_type', ['system', 'manual'])->default('system');
             $table->string('invoice_number')->unique();
-            $table->decimal('subtotal', 15, 2);
-            $table->decimal('tax', 15, 2)->nullable();
-            $table->decimal('discount', 15, 2)->nullable();
-            $table->decimal('grand_total', 15, 2);
+            $table->decimal('subtotal', 15, 0);
+            $table->decimal('tax', 15, 0)->nullable();
+            $table->decimal('discount', 15, 0)->nullable();
+            $table->decimal('grand_total', 15, 0);
             $table->date('issue_date');
             $table->date('due_date');
-            $table->date('paid_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
             $table->enum('status', ['unpaid', 'paid', 'overdue', 'cancelled'])->default('unpaid');
             $table->timestamps();
             $table->unique(['service_id', 'billing_period']);

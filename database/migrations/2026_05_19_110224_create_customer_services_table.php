@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->enum('status', ['pending', 'active', 'suspended', 'terminated'])->default('pending');
-            $table->date('activation_date')->nullable();
+            $table->timestamp('activation_date')->nullable();
             $table->date('expiration_date')->nullable();
             $table->date('deactivation_date')->nullable();
             $table->text('installation_address')->nullable();
