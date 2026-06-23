@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('payment_date');
             $table->string('reference_number')->nullable();
             $table->text('notes')->nullable();
-            $table->enum('status', ['pending', 'completed', 'failed', 'expired', 'cancelled'])->default('pending');
+            $table->string('status');
             $table->string('recorded_by')->nullable();
             $table->timestamps();
         });

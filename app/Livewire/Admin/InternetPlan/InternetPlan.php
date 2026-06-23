@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\InternetPlan;
 
+use App\Enums\InternetPlan\InternetServiceType;
 use App\Models\InternetPlan as Model;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -23,12 +24,12 @@ class InternetPlan extends Component
     public ?Model $selectedPlan = null;
     public $perPage = 10;
 
-    public array $serviceTypes = [
-        'pppoe' => 'PPPoE',
-        'dedicated' => 'Dedicated',
-        'static' => 'Static',
-        'hotspot' => 'Hotspot',
-    ];
+    public array $serviceTypes = [];
+
+    public function mount(): void
+    {
+        $this->serviceTypes = InternetServiceType::options();
+    }
 
     protected function rules(): array
     {

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->references('id')->on('customers');
             $table->foreignId('service_id')->references('id')->on('customer_services');
             $table->char('billing_period', 7);
-            $table->enum('billing_generation_type', ['system', 'manual'])->default('system');
+            $table->string('billing_generation_type');
             $table->string('invoice_number')->unique();
             $table->decimal('subtotal', 15, 0);
             $table->decimal('tax', 15, 0)->nullable();
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->date('issue_date');
             $table->date('due_date');
             $table->timestamp('paid_at')->nullable();
-            $table->enum('status', ['unpaid', 'paid', 'overdue', 'cancelled'])->default('unpaid');
+            $table->string('status');
             $table->timestamps();
             $table->unique(['service_id', 'billing_period']);
         });

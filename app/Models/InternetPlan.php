@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\InternetPlan\InternetServiceType;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,13 @@ class InternetPlan extends Model
         'price',
         'status'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'service_type' => InternetServiceType::class,
+        ];
+    }
 
     protected function priceFormatted(): Attribute
     {

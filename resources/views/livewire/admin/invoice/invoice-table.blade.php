@@ -23,14 +23,15 @@
             </button>
 
         </div>
-        <div class="flex flex-col items-end gap-1.5 w-[50%]">
+        <div class="flex flex-col justify-end items-end gap-1.5 w-full lg:w-[50%]">
             <div>
                 <x-button>Create Invoice</x-button>
             </div>
             <div class="flex items-center gap-1">
                 <label for="billing_period_range" class="text-sm">Period</label>
                 <x-form.date-picker name="billing_period_range" mode="range" :month-picker="true" date-format="Y-m"
-                    alt-format="M Y" class="border border-black/20 rounded px-2 py-1.5 text-sm mx-0.5" />
+                    alt-format="M Y" class="border border-black/20 rounded px-2 py-1.5 text-sm mx-0.5"
+                    placeholder="Select Period" />
             </div>
             <div class="flex items-center gap-3">
                 <div>
@@ -61,10 +62,10 @@
         <table class="w-full text-sm text-left rounded-lg overflow-hidden">
             <thead class="bg-[#007E41] text-white text-sm">
                 <tr>
-                    <th wire:click="sort('payment_status')" class="px-6 py-3 cursor-pointer select-none">
+                    <th scope="col" class="px-6 py-3">
                         Status
                     </th>
-                    <th wire:click="sort('name')" scope="col" class="px-6 py-3 cursor-pointer select-none">
+                    <th scope="col" class="px-6 py-3">
                         Customer Name
                         {{-- @if ($sortBy === 'name')
                             {{ $sortDirection === 'asc' ? '↑' : '↓' }}
@@ -72,6 +73,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Number
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Period
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Total
@@ -91,6 +95,7 @@
                     <td class="px-6 py-4 uppercase">{{ $invoice->status }}</td>
                     <td class="px-6 py-4 font-semibold">{{ $invoice->customer->user->name }}</td>
                     <td class="px-6 py-4 font-semibold uppercase">{{ $invoice->invoice_number }}</td>
+                    <td class="px-6 py-4"></td>
                     <td class="px-6 py-4">{{ rupiah($invoice->grand_total) }}</td>
                     <td class="px-6 py-4"></td>
                     <td class="px-6 py-4"></td>
