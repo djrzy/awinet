@@ -12,6 +12,7 @@
         'py-1',
         'transition',
         'cursor-pointer',
+        'self-center',
     
         // Primary
         'bg-primary text-white hover:bg-primary/80' => $variant === 'primary',

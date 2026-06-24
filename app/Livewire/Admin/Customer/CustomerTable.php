@@ -53,34 +53,33 @@ class CustomerTable extends Component
     public function render()
     {
         $customers = Customer::query()
+            // Direct inner join for searching constraints
             ->join('users', 'users.id', '=', 'customers.user_id')
 
+            // Explicitly select only customer columns to preserve relationship mapping
             ->select('customers.*')
 
+            // Search query constraint mapping block
             ->where(function ($query) {
-                $query
-                    ->where('customers.customer_code', 'like', '%' . $this->search . '%')
-                    ->orWhere('customers.status', 'like', '%' . $this->search . '%')
-                    ->orWhere('users.name', 'like', '%' . $this->search . '%');
+                $term = '%' . $this->search . '%';
+                $query->where('customers.customer_code', 'like', $term)
+                    ->orWhere('customers.status', 'like', $term)
+                    ->orWhere('users.name', 'like', $term);
             })
 
-            ->with('user')
+            // OPTIMIZATION: Eager load only the specific relation columns utilized on your table row
+            ->with('user:id,name,phone')
 
-            ->when(
-                $this->sortBy,
-                function ($query) {
-                    $query->orderBy(
-                        $this->sortBy === 'name'
-                            ? 'users.name'
-                            : 'customers.' . $this->sortBy,
-                        $this->sortDirection
-                    );
-                },
-                function ($query) {
-                    $query->latest('customers.created_at');
-                }
-            )
-
+            // Cleaned Up Sorting Sequence Logic
+            ->when($this->sortBy, function ($query) {
+                $orderColumn = match ($this->sortBy) {
+                    'name' => 'users.name',
+                    default => 'customers.' . $this->sortBy,
+                };
+                $query->orderBy($orderColumn, $this->sortDirection);
+            }, function ($query) {
+                $query->latest('customers.created_at');
+            })
             ->paginate($this->perPage);
 
         return view('livewire.admin.customer.customer-table', [

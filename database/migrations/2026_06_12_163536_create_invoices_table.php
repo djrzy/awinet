@@ -16,7 +16,7 @@ return new class extends Migration
             $table->ulid('uuid')->unique();
             $table->foreignId('tenant_id')->nullable();
             $table->foreignId('customer_id')->references('id')->on('customers');
-            $table->foreignId('service_id')->references('id')->on('customer_services');
+            $table->foreignId('service_id')->nullable()->references('id')->on('customer_services');
             $table->char('billing_period', 7);
             $table->string('billing_generation_type');
             $table->string('invoice_number')->unique();
