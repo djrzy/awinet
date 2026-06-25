@@ -3,8 +3,8 @@
 namespace App\Livewire\Admin\Customer;
 
 use App\Models\Customer;
-use Livewire\Component;
 use App\Models\InternetPlan;
+use Livewire\Component;
 
 class CustomerInternetServices extends Component
 {

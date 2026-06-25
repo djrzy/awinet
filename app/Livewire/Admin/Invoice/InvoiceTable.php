@@ -4,6 +4,12 @@ namespace App\Livewire\Admin\Invoice;
 
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
+use App\Enums\Invoice\InvoiceStatus;
+use App\Enums\Invoice\BillingGenerationType;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,8 +20,8 @@ class InvoiceTable extends Component
     // Table State & Filtering
     public int $perPage = 10;
     public string $search = '';
-    public string $payment_status = 'any'; // Default to match your blade option value
-    public ?string $billing_period_range = ''; // Captures Flatpickr range string
+    public string $payment_status = 'any';
+    public ?string $billing_period_range = '';
 
     // Sorting State
     public ?string $sortBy = null;
@@ -31,6 +37,7 @@ class InvoiceTable extends Component
 
     public function mount(): void
     {
+        // Isolasi data customer otomatis menggunakan Global Scope tenant_id
         $this->customers = Customer::query()
             ->join('users', 'customers.user_id', '=', 'users.id')
             ->select([
@@ -90,9 +97,12 @@ class InvoiceTable extends Component
 
     public function addItem(): void
     {
+        // Disesuaikan dengan penamaan kolom pada input modal Blade Anda
         $this->items[] = [
-            'description' => '',
-            'price' => ''
+            'name' => '',
+            'quantity' => 1,
+            'unit_price' => '',
+            'total_price' => 0
         ];
     }
 
@@ -106,6 +116,21 @@ class InvoiceTable extends Component
         }
     }
 
+    // Melakukan update perhitungan sub-total harga per baris saat quantity / unit_price diketik
+    public function updatedItems($value, $key): void
+    {
+        // Format key yang masuk: "0.quantity" atau "1.unit_price"
+        if (Str::contains($key, ['.quantity', '.unit_price'])) {
+            $parts = explode('.', $key);
+            $index = $parts[0];
+
+            $quantity = (int) ($this->items[$index]['quantity'] ?? 0);
+            $unitPrice = (float) ($this->items[$index]['unit_price'] ?? 0);
+
+            $this->items[$index]['total_price'] = $quantity * $unitPrice;
+        }
+    }
+
     public function create()
     {
         $this->showModal = true;
@@ -114,55 +139,91 @@ class InvoiceTable extends Component
     public function closeModal(): void
     {
         $this->showModal = false;
+        $this->reset(['customer_id', 'items']);
+        $this->addItem();
     }
 
     public function getTotalProperty(): float
     {
         return collect($this->items)->sum(function ($item) {
-            $price = filter_var($item['price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-            return is_numeric($price) ? (float) $price : 0.0;
+            return (float) ($item['total_price'] ?? 0.0);
         });
     }
 
     public function save()
     {
         $this->validate([
-            'customer_id' => 'required',
-            'items.*.description' => 'required|string',
-            'items.*.price' => 'required|numeric|min:0',
+            'customer_id' => 'required|exists:customers,id',
+            'items.*.name' => 'required|string|max:255',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.unit_price' => 'required|numeric|min:0',
         ]);
 
-        // Proceed with Invoice and InvoiceItems storage database workflow...
+        DB::transaction(function () {
+            $invoiceNumber = 'INV-' . Carbon::now()->format('Ymd') . '-' . strtoupper(Str::random(5));
+
+            // 1. Catat data Header Invoice (tenant_id otomatis terisi oleh Global Scope Trait Anda)
+            $invoice = Invoice::create([
+                'customer_id' => $this->customer_id,
+                'invoice_number' => $invoiceNumber,
+                'billing_cycle_id' => null,
+                'issue_date' => Carbon::now(),
+                'due_date' => Carbon::now()->addDays($this->due_date), // Batas pembayaran default 7 hari
+                'total_amount' => $this->total,
+                'status' => InvoiceStatus::Draft,
+                'generation_type' => BillingGenerationType::Manual,
+            ]);
+
+            // 2. Loop dan catat baris detail item mengikuti Migration tabel Anda secara presisi
+            foreach ($this->items as $item) {
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'service_id' => null, // Invoice manual dibuat fleksibel tanpa ikatan layanan internet tertentu
+                    'name' => $item['name'],
+                    'description' => $item['name'], // Deskripsi kita isi serasi dengan nama item
+                    'quantity' => (int) $item['quantity'],
+                    'unit_price' => (float) $item['unit_price'],
+                    'total_price' => (int) $item['quantity'] * (float) $item['unit_price'],
+                ]);
+            }
+        });
+
+        $this->closeModal();
+
+        $this->dispatch(
+            'notify',
+            title: 'Success',
+            message: 'Manual invoice and items have been created successfully.',
+        );
     }
 
     public function render()
     {
+        // Membatasi tabel join invoices.tenant_id agar aman dari ambiguous error column
         $invoicesQuery = Invoice::query()
             ->join('customers', 'invoices.customer_id', '=', 'customers.id')
             ->join('users', 'customers.user_id', '=', 'users.id')
             ->select('invoices.*')
             ->with(['customer.user:id,name'])
-            // 1. Text Searching Constraint Box
             ->where(function ($query) {
                 $term = '%' . $this->search . '%';
                 $query->where('invoices.invoice_number', 'like', $term)
                     ->orWhere('users.name', 'like', $term);
             });
-        // 2. Dropdown Status Filter
+
         if ($this->payment_status && $this->payment_status !== 'any') {
             $invoicesQuery->where('invoices.status', $this->payment_status);
         }
-        // 3. Flatpickr Month Range Filter (Format parsed: 'YYYY-MM to YYYY-MM')
+
         if (!empty($this->billing_period_range)) {
             $periods = explode(' to ', $this->billing_period_range);
             if (count($periods) === 2) {
                 $invoicesQuery->whereBetween('invoices.billing_period', [$periods[0], $periods[1]]);
             } else {
-                // If user selected only a single starting month so far
                 $invoicesQuery->where('invoices.billing_period', $periods[0]);
             }
         }
-        // 4. Dynamic Ordering Execution Sequence
+
         $invoicesQuery->when($this->sortBy, function ($query) {
             $orderColumn = match ($this->sortBy) {
                 'status'         => 'invoices.status',

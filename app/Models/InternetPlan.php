@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InternetPlan\InternetServiceType;
 use App\Models\Customer;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InternetPlan extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, BelongsToTenant;
 
     protected $fillable = [
         'tenant_id',

@@ -4,6 +4,7 @@ namespace App\Enums\Invoice;
 
 enum InvoiceStatus: string
 {
+    case Draft = 'draft';
     case Unpaid = 'unpaid';
     case Paid = 'paid';
     case Overdue = 'overdue';
@@ -11,6 +12,6 @@ enum InvoiceStatus: string
 
     public static function default(): self
     {
-        return self::Unpaid;
+        return self::Draft;
     }
 }

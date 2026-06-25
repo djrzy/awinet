@@ -128,7 +128,7 @@
     </div>
 
     {{-- Create Modal --}}
-    <x-modal show="showModal" maxWidth="xl" closeable=1>
+    <x-modal show="showModal" size="xl" closeable=1>
         <x-slot:header>
             <h2 class="text-lg font-semibold">
                 Create Invoice
@@ -143,24 +143,50 @@
             <x-form.search-select name="customer_id" label="Customer" wire:model="customer_id" :options="$customers"
                 placeholder="Select a customer..." />
 
+            <x-form.input-group name="due_date" wire:model="due_date" label="Due Date" Suffix="Days"
+                placeholder="How many days you want this invoice due?" />
+
             <div class="space-y-3">
                 <div class="border-b border-gray-200 pb-2 mb-4 font-semibold text-gray-700">
                     Invoice Items
                 </div>
 
+                <table class="w-full table-fixed">
+                    <thead>
+                        <th class="text-center pl-15 w-[16.5%]">#</th>
+                        <th class="text-center w-[33%]">Name</th>
+                        <th class="text-center w-[7%]">Unit</th>
+                        <th class="text-center w-[18%]">Price</th>
+                        <th class="text-center w-[18%]">Total Price</th>
+                        <th class="text-center w-[7.5%]">Remove</th>
+                    </thead>
+                </table>
+
                 @foreach ($items as $index => $item)
                     <x-form.form-row :label="'Item ' . ($index + 1)">
 
                         <div class="flex-1 w-full">
-                            <x-form.input-group name="items.{{ $index }}.description"
-                                wire:model="items.{{ $index }}.description" placeholder="Item description..."
+                            <x-form.input-group name="items.{{ $index }}.name"
+                                wire:model="items.{{ $index }}.name" placeholder="Item description..."
+                                :label="false" />
+                        </div>
+
+                        <div class="w-full sm:w-12">
+                            <x-form.input-group name="items.{{ $index }}.quantity"
+                                wire:model.live.debounce.500ms="items.{{ $index }}.quantity" placeholder="0"
                                 :label="false" />
                         </div>
 
                         <div class="w-full sm:w-34">
-                            <x-form.input-group name="items.{{ $index }}.price"
-                                wire:model.live.debounce.500ms="items.{{ $index }}.price" prefix="Rp"
+                            <x-form.input-group name="items.{{ $index }}.unit_price"
+                                wire:model.live.debounce.500ms="items.{{ $index }}.unit_price" prefix="Rp"
                                 placeholder="0" :label="false" />
+                        </div>
+
+                        <div class="w-full sm:w-34">
+                            <x-form.input-group name="items.{{ $index }}.total_price"
+                                wire:model="items.{{ $index }}.total_price" class="bg-gray-200 text-gray-700"
+                                prefix="Rp" placeholder="0" :label="false" disabled />
                         </div>
 
                         <x-button variant="danger" wire:click="removeItem({{ $index }})">
@@ -171,8 +197,7 @@
                 @endforeach
 
                 <div class="flex flex-col lg:flex-row items-start lg:gap-4 mt-4">
-                    <div class="lg:w-[30%]"></div>
-                    <div class="w-full lg:w-[70%]">
+                    <div class="w-full flex items-center justify-center">
                         <x-button variant="secondary" wire:click="addItem">Add Another Item</x-button>
                     </div>
                 </div>

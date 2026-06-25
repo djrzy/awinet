@@ -4,13 +4,32 @@ namespace App\Models;
 
 use App\Enums\Invoice\BillingGenerationType;
 use App\Enums\Invoice\InvoiceStatus;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
     /** @use HasFactory<\Database\Factories\InvoiceFactory> */
-    use HasFactory;
+    use HasFactory, BelongsToTenant;
+
+    protected $fillable = [
+        'uuid',
+        'tenant_id',
+        'customer_id',
+        'service_id',
+        'billing_period',
+        'billing_generation_type',
+        'invoice_number',
+        'subtotal',
+        'tax',
+        'discount',
+        'grand_total',
+        'issue_date',
+        'due_date',
+        'paid_at',
+        'status',
+    ];
 
     protected function casts(): array
     {
