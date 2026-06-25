@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Enums\Invoice\InvoiceStatus;
 use App\Enums\Invoice\BillingGenerationType;
+use App\Services\Invoice\InvoiceNumberService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -32,6 +33,7 @@ class InvoiceTable extends Component
     public array $customers = [];
     public array $items = [];
     public $customer_id = null;
+    public int $due_date;
 
     public array $perPageOptions = [5, 10, 25, 50, 100];
 
@@ -150,28 +152,33 @@ class InvoiceTable extends Component
         });
     }
 
-    public function save()
+    public function save(InvoiceNumberService $invoiceBuilder)
     {
         $this->validate([
             'customer_id' => 'required|exists:customers,id',
+            'due_date' => 'required|integer|min:1',
             'items.*.name' => 'required|string|max:255',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
         ]);
 
-        DB::transaction(function () {
-            $invoiceNumber = 'INV-' . Carbon::now()->format('Ymd') . '-' . strtoupper(Str::random(5));
+        DB::transaction(function () use ($invoiceBuilder) {
+            $invoiceNumber = $invoiceBuilder->generateSequentialPattern('INV');
+            $now = Carbon::now();
+            $year = $now->format('Y');
+            $month = $now->format('m');
 
             // 1. Catat data Header Invoice (tenant_id otomatis terisi oleh Global Scope Trait Anda)
             $invoice = Invoice::create([
                 'customer_id' => $this->customer_id,
                 'invoice_number' => $invoiceNumber,
-                'billing_cycle_id' => null,
+                'billing_period' => $year . '-' . $month,
                 'issue_date' => Carbon::now(),
                 'due_date' => Carbon::now()->addDays($this->due_date), // Batas pembayaran default 7 hari
-                'total_amount' => $this->total,
+                'subtotal' => $this->total,
+                'grand_total' => $this->total,
                 'status' => InvoiceStatus::Draft,
-                'generation_type' => BillingGenerationType::Manual,
+                'billing_generation_type' => BillingGenerationType::Manual,
             ]);
 
             // 2. Loop dan catat baris detail item mengikuti Migration tabel Anda secara presisi
@@ -195,6 +202,11 @@ class InvoiceTable extends Component
             title: 'Success',
             message: 'Manual invoice and items have been created successfully.',
         );
+    }
+
+    public function paginationView()
+    {
+        return 'components.pagination.index';
     }
 
     public function render()

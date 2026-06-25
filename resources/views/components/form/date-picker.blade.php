@@ -30,8 +30,8 @@ $watch('value', val => {
 
     {{-- Workaround: Tombol reset yang hanya muncul jika input 'value' ada isinya --}}
     <button x-show="value" x-cloak type="button" @click="value = ''; instance.clear();"
-        class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer flex items-center justify-center z-10">
-        <span class="material-symbols-outlined text-base">
+        class="absolute right-2 top-1/2 -translate-y-1/2 text-black hover:text-gray-600 cursor-pointer flex items-center justify-center z-10">
+        <span class="material-symbols-outlined text-sm!">
             close
         </span>
     </button>

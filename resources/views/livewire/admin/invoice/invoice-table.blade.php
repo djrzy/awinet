@@ -1,4 +1,6 @@
-<div class="relative p-2">
+<div x-data="toast" x-on:notify.window="showToast($event)" class="relative p-2">
+
+    {{-- Filter UI --}}
     <div class="mt-2 mb-2 flex flex-wrap justify-between items-center px-1 space-y-3 row">
         <div x-data="{ search: @entangle('search').live }" class="relative">
 
@@ -55,6 +57,7 @@
         </div>
     </div>
 
+    {{-- Table --}}
     <div class="overflow-x-auto">
         <table class="w-full text-sm text-left rounded-lg overflow-hidden">
             <thead class="bg-[#007E41] text-white text-sm select-none">
@@ -93,7 +96,8 @@
                     <tr wire:key="invoice-row-{{ $invoice->id }}" class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 uppercase font-semibold text-xs">
                             <span
-                                class="px-2 py-0.5 rounded-sm {{ $invoice->status === 'paid' ? 'bg-green-500 text-white' : ($invoice->status === 'unpaid' ? 'bg-red-500 text-white' : 'bg-gray-400 text-white') }}">
+                                class="px-2 py-0.5 rounded-sm text-white
+                                {{ $invoice->status === 'paid' ? 'bg-green-500' : ($invoice->status === 'unpaid' ? 'bg-red-500' : 'bg-gray-400') }}">
                                 {{ $invoice->status }}
                             </span>
                         </td>
@@ -103,10 +107,10 @@
                         <td class="px-6 py-4 font-mono uppercase text-xs text-gray-600">
                             {{ $invoice->invoice_number }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             {{ month_year($invoice->billing_period) }}
                         </td>
-                        <td class="px-6 py-4 font-semibold text-gray-900">
+                        <td class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap">
                             {{ rupiah($invoice->grand_total) }}
                         </td>
                         <td class="px-6 py-4 text-center text-gray-500">—</td>
@@ -230,6 +234,8 @@
             </x-button>
         </x-slot:footer>
     </x-modal>
+
+    <x-toast />
 </div>
 
 

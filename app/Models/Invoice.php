@@ -5,13 +5,15 @@ namespace App\Models;
 use App\Enums\Invoice\BillingGenerationType;
 use App\Enums\Invoice\InvoiceStatus;
 use App\Traits\BelongsToTenant;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 class Invoice extends Model
 {
     /** @use HasFactory<\Database\Factories\InvoiceFactory> */
-    use HasFactory, BelongsToTenant;
+    use HasFactory, BelongsToTenant, HasUlids;
 
     protected $fillable = [
         'uuid',
@@ -30,6 +32,17 @@ class Invoice extends Model
         'paid_at',
         'status',
     ];
+
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
+    }
+
+    #[Override]
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     protected function casts(): array
     {
