@@ -2,21 +2,26 @@
 
     {{-- Filter UI --}}
     <div class="mt-2 mb-2 flex flex-wrap justify-between items-center px-1 space-y-3 row">
-        <div x-data="{ search: @entangle('search').live }" class="relative">
+        <div class="flex flex-col gap-11">
+            <h2 class="text-lg font-semibold">
+                Invoices
+            </h2>
+            <div x-data="{ search: @entangle('search').live }" class="relative">
 
-            <input x-model.debounce.300ms="search" type="text"
-                class="py-1 px-2 border text-sm border-black/20 rounded-sm w-full pr-8 placeholder:text-sm placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#007E41]"
-                placeholder="Search..">
+                <input x-model.debounce.300ms="search" type="text"
+                    class="py-1 px-2 border text-sm border-black/20 rounded-sm w-full pr-8 placeholder:text-sm placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#007E41]"
+                    placeholder="Search..">
 
-            <button x-show="!search" type="button"
-                class="absolute -translate-y-1/2 top-1/2 right-2 flex items-center justify-center">
-                <span class="material-symbols-outlined text-lg!">search</span>
-            </button>
+                <button x-show="!search" type="button"
+                    class="absolute -translate-y-1/2 top-1/2 right-2 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-lg!">search</span>
+                </button>
 
-            <button x-show="search" x-cloak @click="search = ''" type="button"
-                class="absolute -translate-y-1/2 top-1/2 right-2 flex items-center justify-center cursor-pointer">
-                <span class="material-symbols-outlined text-lg!">close</span>
-            </button>
+                <button x-show="search" x-cloak @click="search = ''" type="button"
+                    class="absolute -translate-y-1/2 top-1/2 right-2 flex items-center justify-center cursor-pointer">
+                    <span class="material-symbols-outlined text-lg!">close</span>
+                </button>
+            </div>
         </div>
 
         <div class="flex flex-col justify-end items-end gap-1.5 w-full lg:w-[50%]">
@@ -62,18 +67,6 @@
         <table class="w-full text-sm text-left rounded-lg overflow-hidden">
             <thead class="bg-[#007E41] text-white text-sm select-none">
                 <tr>
-                    <th wire:click="sort('status')" class="px-6 py-3 cursor-pointer">
-                        Status
-                        @if ($sortBy === 'status')
-                            <span>{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                        @endif
-                    </th>
-                    <th wire:click="sort('customer_name')" class="px-6 py-3 cursor-pointer">
-                        Customer Name
-                        @if ($sortBy === 'customer_name')
-                            <span>{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                        @endif
-                    </th>
                     <th wire:click="sort('invoice_number')" class="px-6 py-3 cursor-pointer">
                         Number
                         @if ($sortBy === 'invoice_number')
@@ -86,34 +79,41 @@
                             <span>{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                         @endif
                     </th>
+                    <th scope="col" class="px-6 py-3">Issue Date</th>
                     <th scope="col" class="px-6 py-3">Total</th>
                     <th scope="col" class="px-6 py-3 text-center">Payment Date</th>
-                    <th scope="col" class="px-6 py-3 text-center">Payment Type</th>
+                    <th wire:click="sort('status')" class="px-6 py-3 cursor-pointer">
+                        Status
+                        @if ($sortBy === 'status')
+                            <span>{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                        @endif
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="*:even:bg-gray-100">
                 @forelse ($invoices as $invoice)
                     <tr wire:key="invoice-row-{{ $invoice->id }}" class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 uppercase font-semibold text-xs">
-                            <span
-                                class="px-2 py-0.5 rounded-sm text-white
-                                {{ $invoice->status === 'paid' ? 'bg-green-500' : ($invoice->status === 'unpaid' ? 'bg-red-500' : 'bg-gray-400') }}">
-                                {{ $invoice->status }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 font-semibold text-gray-900">
-                            {{ $invoice->customer?->user?->name ?? 'Unknown User' }}
-                        </td>
                         <td class="px-6 py-4 font-mono uppercase text-xs text-gray-600">
                             {{ $invoice->invoice_number }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ month_year($invoice->billing_period) }}
                         </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ full_date($invoice->issue_date) }}
+                        </td>
                         <td class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap">
                             {{ rupiah($invoice->grand_total) }}
                         </td>
                         <td class="px-6 py-4 text-center text-gray-500">—</td>
+                        <td class="px-6 py-4 uppercase font-semibold text-xs">
+                            <span
+                                class="px-2 py-0.5 rounded-sm text-white
+                            {{ $invoice->status === 'paid' ? 'bg-green-500' : ($invoice->status === 'unpaid' ? 'bg-red-500' : 'bg-gray-400') }}">
+                                {{ $invoice->status }}
+                            </span>
+                        </td>
                         <td class="px-6 py-4 text-center text-gray-500">—</td>
                     </tr>
                 @empty

@@ -1,22 +1,24 @@
 <?php
 
-namespace App\Livewire\Admin\Invoice;
+namespace App\Livewire\Admin\Customer;
 
+use App\Enums\Invoice\BillingGenerationType;
+use App\Enums\Invoice\InvoiceStatus;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
-use App\Enums\Invoice\InvoiceStatus;
-use App\Enums\Invoice\BillingGenerationType;
 use App\Services\Invoice\InvoiceNumberService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class InvoiceTable extends Component
+class CustomerInvoice extends Component
 {
     use WithPagination;
+
+    public Customer $customer;
 
     // Table State & Filtering
     public int $perPage = 10;
@@ -33,14 +35,14 @@ class InvoiceTable extends Component
     public array $customers = [];
     public array $items = [];
     public $customer_id = null;
-    public int $due_date;
+    public ?int $due_date = 7; // Mengatur default tempo 7 hari agar form tidak kosong/error
     public $discount = 0;
 
     public array $perPageOptions = [5, 10, 25, 50, 100];
 
     public function mount(): void
     {
-        // Isolasi data customer otomatis menggunakan Global Scope tenant_id
+        // Mengunci Pilihan drop-down di modal hanya untuk data customer yang aktif saat ini
         $this->customers = Customer::query()
             ->join('users', 'customers.user_id', '=', 'users.id')
             ->select([
@@ -49,6 +51,7 @@ class InvoiceTable extends Component
                 'users.name as user_name'
             ])
             ->toBase()
+            ->where('customers.id', $this->customer->id) // Memastikan isolasi data target
             ->get()
             ->map(fn($customer) => [
                 'id' => $customer->customer_id,
@@ -59,6 +62,9 @@ class InvoiceTable extends Component
                 ),
             ])
             ->toArray();
+
+        // Otomatis mengunci value default form customer_id ke ID Pelanggan aktif
+        $this->customer_id = $this->customer->id;
 
         $this->addItem();
     }
@@ -100,7 +106,6 @@ class InvoiceTable extends Component
 
     public function addItem(): void
     {
-        // Disesuaikan dengan penamaan kolom pada input modal Blade Anda
         $this->items[] = [
             'name' => '',
             'quantity' => 1,
@@ -119,19 +124,26 @@ class InvoiceTable extends Component
         }
     }
 
-    // Melakukan update perhitungan sub-total harga per baris saat quantity / unit_price diketik
     public function updatedItems($value, $key): void
     {
-        // Format key yang masuk: "0.quantity" atau "1.unit_price"
         if (Str::contains($key, ['.quantity', '.unit_price'])) {
             $parts = explode('.', $key);
             $index = $parts[0];
 
-            $quantity = (int) ($this->items[$index]['quantity'] ?? 0);
-            $unitPrice = (float) ($this->items[$index]['unit_price'] ?? 0);
-
-            $this->items[$index]['total_price'] = $quantity * $unitPrice;
+            $this->calculateItemTotal((int) $index);
         }
+    }
+
+    protected function calculateItemTotal(int $index): void
+    {
+        if (! isset($this->items[$index])) {
+            return;
+        }
+
+        $quantity = (float) ($this->items[$index]['quantity'] ?? 0);
+        $unitPrice = (float) ($this->items[$index]['unit_price'] ?? 0);
+
+        $this->items[$index]['total_price'] = $quantity * $unitPrice;
     }
 
     public function create()
@@ -142,30 +154,29 @@ class InvoiceTable extends Component
     public function closeModal(): void
     {
         $this->showModal = false;
-        $this->reset(['customer_id', 'items']);
+        // customer_id tidak ikut di-reset agar form modal selanjutnya tetap terkunci ke customer aktif
+        $this->reset(['items', 'discount']);
+        $this->due_date = 7;
         $this->addItem();
     }
 
     public function getTotalProperty(): float
     {
-        // Hitung Subtotal dari semua baris item
         $subtotal = collect($this->items)->sum(function ($item) {
             return (float) ($item['total_price'] ?? 0.0);
         });
 
-        // Kalkulasi akhir: (Subtotal - Diskon) + Biaya Gateway
         $discountAmount = (float) $this->discount;
-
         $grandTotal = $subtotal - $discountAmount;
 
-        // Pastikan nilai grand total tidak minus jika diskon terlalu besar
         return $grandTotal < 0 ? 0.0 : $grandTotal;
     }
 
     public function save(InvoiceNumberService $invoiceBuilder)
     {
+        // Validasi data
         $this->validate([
-            'customer_id' => 'required|exists:customers,id',
+            'customer_id' => 'required|in:' . $this->customer->id, // Mengunci agar tidak bisa dimanipulasi pihak luar
             'due_date' => 'required|integer|min:1',
             'items.*.name' => 'required|string|max:255',
             'items.*.quantity' => 'required|integer|min:1',
@@ -181,17 +192,18 @@ class InvoiceTable extends Component
             });
 
             $discountAmount = (float) $this->discount;
-            $taxAmount = 0;
-
             $grandTotal = $subtotal - $discountAmount;
+            if ($grandTotal < 0) {
+                $grandTotal = 0;
+            }
 
             $now = Carbon::now();
             $year = $now->format('Y');
             $month = $now->format('m');
 
-            // 1. Catat data Header Invoice (tenant_id otomatis terisi oleh Global Scope Trait Anda)
+            // 1. Catat data Header Invoice (Terikat langsung ke pelanggan aktif)
             $invoice = Invoice::create([
-                'customer_id' => $this->customer_id,
+                'customer_id' => $this->customer->id,
                 'invoice_number' => $invoiceNumber,
                 'billing_period' => $year . '-' . $month,
                 'issue_date' => Carbon::now(),
@@ -203,11 +215,11 @@ class InvoiceTable extends Component
                 'discount' => $discountAmount,
             ]);
 
-            // 2. Loop dan catat baris detail item mengikuti Migration tabel Anda secara presisi
+            // 2. Catat detail item invoice
             foreach ($this->items as $item) {
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
-                    'service_id' => null, // Invoice manual dibuat fleksibel tanpa ikatan layanan internet tertentu
+                    'service_id' => null,
                     'name' => $item['name'],
                     'description' => $item['name'],
                     'quantity' => (int) $item['quantity'],
@@ -222,7 +234,7 @@ class InvoiceTable extends Component
         $this->dispatch(
             'notify',
             title: 'Success',
-            message: 'Manual invoice and items have been created successfully.',
+            message: 'Manual invoice for this customer has been created successfully.',
         );
     }
 
@@ -233,16 +245,16 @@ class InvoiceTable extends Component
 
     public function render()
     {
-        // Membatasi tabel join invoices.tenant_id agar aman dari ambiguous error column
+        // Mengunci kueri tabel histori tagihan agar HANYA memunculkan tagihan milik pelanggan ini saja
         $invoicesQuery = Invoice::query()
             ->join('customers', 'invoices.customer_id', '=', 'customers.id')
             ->join('users', 'customers.user_id', '=', 'users.id')
             ->select('invoices.*')
             ->with(['customer.user:id,name'])
+            ->where('invoices.customer_id', $this->customer->id)
             ->where(function ($query) {
                 $term = '%' . $this->search . '%';
-                $query->where('invoices.invoice_number', 'like', $term)
-                    ->orWhere('users.name', 'like', $term);
+                $query->where('invoices.invoice_number', 'like', $term);
             });
 
         if ($this->payment_status && $this->payment_status !== 'any') {
@@ -261,7 +273,6 @@ class InvoiceTable extends Component
         $invoicesQuery->when($this->sortBy, function ($query) {
             $orderColumn = match ($this->sortBy) {
                 'status'         => 'invoices.status',
-                'customer_name'  => 'users.name',
                 'billing_period' => 'invoices.billing_period',
                 'invoice_number' => 'invoices.invoice_number',
                 default          => 'invoices.created_at',
@@ -271,7 +282,7 @@ class InvoiceTable extends Component
             $query->latest('invoices.created_at');
         });
 
-        return view('livewire.admin.invoice.invoice-table', [
+        return view('livewire.admin.customer.customer-invoice', [
             'invoices' => $invoicesQuery->paginate($this->perPage),
             'total' => $this->total,
         ]);

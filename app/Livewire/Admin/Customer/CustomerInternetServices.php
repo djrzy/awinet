@@ -45,6 +45,7 @@ class CustomerInternetServices extends Component
 
         return [
             'customer_id' => $this->customer->id,
+            'tenant_id' => auth()->user()->tenant_id,
             'service_name' => $this->service_name,
             'username' => $this->username,
             'password' => $this->password,

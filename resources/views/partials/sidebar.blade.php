@@ -388,10 +388,9 @@
             </a>
         </li> --}}
         <li x-data="{
-            open: {{ request()->routeIs('settings*') ? 'true' : 'false' }}
+            open: {{ request()->is('setting*') ? 'true' : 'false' }}
         }" @click.away="open = false">
-            <button @click="open = !open"
-                class="sidebar-menu {{ request()->routeIs('settings.*') ? 'bg-secondary' : '' }}"
+            <button @click="open = !open" class="sidebar-menu {{ request()->is('setting*') ? 'bg-secondary' : '' }}"
                 :class="{ 'font-semibold': open }">
                 <span class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[22px]!">
@@ -406,9 +405,9 @@
             </button>
             <ul x-show="open" x-collapse x-cloak class="text-sm space-y-0">
                 <li>
-                    <a href="#"
+                    <a href="{{ route('admin.billing-cycles.create') }}"
                         class="block py-2 hover:text-white hover:bg-white/30 pl-12.5
-                        {{-- {{ request()->routeIs('plan.internet') ? 'font-semibold' : '' }} --}}
+                        {{ request()->routeIs('admin.billing-cycles.create') ? 'font-semibold' : '' }}
                          ">
                         Billing Cycle
                     </a>

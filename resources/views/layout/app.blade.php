@@ -15,10 +15,10 @@
     <link rel="icon" href="{{ asset('awinet.png') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    @livewireScripts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-@livewireScripts
 
 <body x-data="{ sidebarOpen: window.innerWidth >= 1024 }" class="overflow-hidden relative font-default">
     @include('partials.navbar')

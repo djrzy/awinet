@@ -89,15 +89,7 @@
 
         {{-- INVOICES --}}
         <div x-show="tab === 'invoices'" class="bg-white rounded-lg shadow p-6">
-
-            <h2 class="text-lg font-semibold mb-4">
-                Invoices
-            </h2>
-
-            <p class="text-gray-500">
-                No invoices yet.
-            </p>
-
+            @livewire('admin.customer.customer-invoice', ['customer' => $customer])
         </div>
 
         {{-- TICKETS --}}

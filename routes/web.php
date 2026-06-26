@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\Customer\CustomerController;
 use App\Http\Controllers\Admin\InternetPlan\InternetPlanController;
+use App\Http\Controllers\Admin\Tenant\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,3 +38,7 @@ Route::get('/maps', function () {
 Route::get('/invoice', function () {
     return view('pages.admin.invoice.index');
 })->middleware(['auth'])->name('invoice');
+
+Route::middleware(['auth'])->name('admin.')->group(function () {
+    Route::get('/setting/billing-cycle', [SettingsController::class, 'billing_cycle'])->name('billing-cycles.create');
+});

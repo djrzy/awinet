@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('billing_cycles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->nullable();
+            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
             $table->enum('billing_type', ['fixed', 'anniversary']);
-            $table->date('billing_date')->nullable();
-            $table->date('due_date');
+            $table->string('billing_date')->nullable();
+            $table->string('due_date');
             $table->string('grace_period');
             $table->timestamps();
         });

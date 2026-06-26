@@ -16,7 +16,7 @@ class InvoiceNumberService
     {
         do {
             $date = Carbon::now()->format('Ymd');
-            $randomString = strtoupper(Str::random(5));
+            $randomString = strtoupper(Str::random(7));
             $invoiceNumber = "{$prefix}-{$date}-{$randomString}";
 
             // Validasi ke database untuk memastikan benar-benar unik (menghindari bentrokan kueri)
@@ -45,8 +45,8 @@ class InvoiceNumberService
             ->first();
 
         if ($lastInvoice) {
-            // Ambil 5 digit terakhir nomor urut, lalu naikkan nilainya (+1)
-            $lastNumber = (int) substr($lastInvoice->invoice_number, -5);
+            // Ambil 6 digit terakhir nomor urut, lalu naikkan nilainya (+1)
+            $lastNumber = (int) substr($lastInvoice->invoice_number, -6);
             $nextNumber = $lastNumber + 1;
         } else {
             // Jika belum ada invoice sama sekali di bulan ini, mulai dari 1
@@ -54,7 +54,7 @@ class InvoiceNumberService
         }
 
         // Susun nomor dengan padding angka 0 di depan (cth: 00001, 00012, 00123)
-        $sequence = str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+        $sequence = str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
 
         return "{$prefix}/{$year}/{$month}/{$sequence}";
     }

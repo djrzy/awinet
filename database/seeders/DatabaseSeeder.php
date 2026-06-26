@@ -52,7 +52,8 @@ class DatabaseSeeder extends Seeder
         // 5. Jalankan seeder data bawaan lainnya jika ada
         $this->call([
             PaymentMethodSeeder::class,
-            InternetPlanSeeder::class, // Jika seeder ini dijalankan, pastikan di dalamnya sudah diset tenant_id nya ya!
+            // Jika seeder ini dijalankan, pastikan di dalamnya sudah diset tenant_id nya ya!
+            InternetPlanSeeder::class,
             CustomerSeeder::class,
         ]);
     }
