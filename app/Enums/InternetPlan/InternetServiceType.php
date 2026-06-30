@@ -7,7 +7,6 @@ enum InternetServiceType: string
     case PPPoE = 'pppoe';
     case Dedicated = 'dedicated';
     case Static = 'static';
-    case Hotspot = 'hotspot';
 
     public function label(): string
     {
@@ -15,7 +14,6 @@ enum InternetServiceType: string
             self::PPPoE => 'PPPoE',
             self::Dedicated => 'Dedicated',
             self::Static => 'Static',
-            self::Hotspot => 'Hotspot',
         };
     }
 

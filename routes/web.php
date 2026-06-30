@@ -41,4 +41,8 @@ Route::get('/invoice', function () {
 
 Route::middleware(['auth'])->name('admin.')->group(function () {
     Route::get('/setting/billing-cycle', [SettingsController::class, 'billing_cycle'])->name('billing-cycles.create');
+
+    Route::get('/routers', function () {
+        return view('pages::admin.router.index');
+    })->name('routers');
 });

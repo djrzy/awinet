@@ -12,6 +12,7 @@ import "flatpickr/dist/plugins/monthSelect/style.css";
 window.flatpickr = flatpickr;
 window.monthSelectPlugin = monthSelectPlugin;
 
+import toast from "./components/toast";
 import mapPicker from "./components/map-picker";
 import mapViewer from "./components/map-viewer";
 
@@ -33,26 +34,7 @@ L.Icon.Default.mergeOptions({
  * Reusable Toast Component
  */
 document.addEventListener("alpine:init", () => {
-    Alpine.data("toast", () => ({
-        toast: false,
-        toastTitle: "",
-        toastMessage: "",
-        toastTimeout: null,
-
-        showToast(event) {
-            if (!event.detail?.title) return;
-
-            clearTimeout(this.toastTimeout);
-
-            this.toast = true;
-            this.toastTitle = event.detail.title;
-            this.toastMessage = event.detail.message;
-
-            this.toastTimeout = setTimeout(() => {
-                this.toast = false;
-            }, 3000);
-        },
-    }));
+    Alpine.data("toast", toast);
 
     Alpine.data("mapPicker", mapPicker);
 

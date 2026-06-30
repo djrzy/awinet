@@ -11,6 +11,7 @@ class CustomerService extends Model
         'customer_id',
         'service_name',
         'internet_plan_id',
+        'ip_address',
         'username',
         'password',
         'status',
@@ -36,5 +37,10 @@ class CustomerService extends Model
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    public function router()
+    {
+        return $this->belongsTo(Router::class);
     }
 }

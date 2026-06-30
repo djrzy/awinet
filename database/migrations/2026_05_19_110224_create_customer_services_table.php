@@ -18,8 +18,10 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained('customers');
             $table->foreignId('internet_plan_id')->constrained('internet_plans');
             $table->string('service_name');
+            $table->foreignId('router_id')->nullable()->constrained('routers');
             $table->string('username')->nullable();
             $table->string('password')->nullable();
+            $table->string('ip_address')->nullable();
             $table->string('status')->default(ServiceStatus::default()->value);
             $table->timestamp('activation_date')->nullable();
             $table->date('expiration_date')->nullable();
@@ -27,7 +29,6 @@ return new class extends Migration
             $table->text('installation_address')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
-            $table->string('router_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

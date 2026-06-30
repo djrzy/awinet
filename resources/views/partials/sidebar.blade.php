@@ -217,7 +217,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
+                    <a href="{{ route('admin.routers') }}"
+                        class="block py-2 hover:text-white hover:bg-white/30 pl-12.5">
                         Routers
                     </a>
                 </li>

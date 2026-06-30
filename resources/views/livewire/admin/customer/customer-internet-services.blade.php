@@ -49,7 +49,7 @@
                                 <button type="button" wire:click="viewEdit({{ $service->id }})" title="View Details"
                                     class="text-gray-400 hover:text-cyan-500 cursor-pointer">
                                     <span class="material-symbols-outlined text-xl!">
-                                        edit_square
+                                        visibility
                                     </span>
                                 </button>
 
@@ -163,19 +163,35 @@
                 }">
 
                 <x-form.input-group type="text" name="service_name" wire:model="service_name" />
-                <x-form.input-group type="text" name="username" wire:model="username" />
-                <x-form.input-group type="password" name="password" wire:model="password" />
-                <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id">
-                    <option value="">
-                        Select Internet Plan
-                    </option>
 
-                    @foreach ($internetPlans as $id => $name)
-                        <option value="{{ $id }}">
-                            {{ $name }}
+                <!-- Select Router Terlebih Dahulu -->
+                <x-form.select name="router_id" label="Router Target" wire:model="router_id">
+                    <option value="">Select Router</option>
+                    @foreach ($routers as $id => $name)
+                        <option value="{{ $id }}">{{ $name }}</option>
+                    @endforeach
+                </x-form.select>
+
+                <!-- Dropdown Paket Internet -->
+                <x-form.select name="internet_plan_id" label="Internet Plan" wire:model.live="internet_plan_id">
+                    <option value="">Select Internet Plan</option>
+                    @foreach ($internetPlans as $internetPlan)
+                        <option value="{{ $internetPlan['id'] }}">{{ $internetPlan['name'] }}
+                            ({{ $internetPlan['service_type'] }})
                         </option>
                     @endforeach
                 </x-form.select>
+
+                <!-- INPUT REAKTIF BERBASIS TIPE SERVICE PLAN -->
+                @if ($currentServiceType === 'pppoe')
+                    <x-form.input-group type="text" name="username" label="Username" wire:model="username" />
+                    <x-form.input-group type="text" name="password" label="Password" wire:model="password" />
+                @endif
+
+                @if (in_array($currentServiceType, ['static', 'dedicated']))
+                    <x-form.input-group type="text" name="ip_address" label="IP Address" wire:model="ip_address"
+                        placeholder="Contoh: 103.11.22.33" />
+                @endif
 
                 <x-form.radio-button name="similar_address" wire:model.live="similar_address" label="Address"
                     direction="vertical" :options="[
@@ -184,34 +200,23 @@
                     ]" />
 
                 <div x-show="similarAddress == '0'" x-cloak>
-
                     <x-form.textarea name="installation_address" wire:model="installation_address" rows="3"
                         class="resize-none" />
-
                     <div class="w-full relative flex flex-col lg:flex-row lg:gap-4 mt-3">
                         <label for="postal_code" class="lg:w-[30%] lg:text-right">Location Base On Map</label>
                         <div wire:ignore x-data="mapPicker({
-                        
                             id: 'create-service-map',
-                        
                             lat: @entangle('latitude'),
                             lng: @entangle('longitude'),
-                        
                             zoom: 17
                         })" x-init="init()"
                             class="space-y-2 w-full lg:w-[70%]">
-
                             <div x-ref="map" class="h-70 rounded-md w-full bg-gray-100"></div>
-
                             <input type="hidden" wire:model="latitude" x-model="lat">
-
                             <input type="hidden" wire:model="longitude" x-model="lng">
-
                         </div>
                     </div>
-
                 </div>
-
             </form>
         @endif
 
@@ -228,9 +233,9 @@
                     disabled />
                 <x-form.select name="internet_plan_id" label="Internet Plan" wire:model="internet_plan_id" disabled
                     class="appearance-none bg-gray-100">
-                    @foreach ($internetPlans as $id => $name)
-                        <option value="{{ $id }}">
-                            {{ $name }}
+                    @foreach ($internetPlans as $internetPlan)
+                        <option value="{{ $internetPlan['id'] }}">
+                            {{ $internetPlan['name'] }}
                         </option>
                     @endforeach
                 </x-form.select>
@@ -242,13 +247,13 @@
                     <label for="postal_code" class="lg:w-[30%] lg:text-right">Location Base On Map</label>
                     <div wire:ignore x-data="mapViewer({
                         id: 'customer-map',
-                    
+
                         zoom: 17,
-                    
+
                         markers: [{
                             lat: @js($latitude),
                             lng: @js($longitude),
-                    
+
                             popup: 'Customer location',
                         }]
                     })" x-init="init()"
@@ -287,9 +292,9 @@
                         Select Plan
                     </option>
 
-                    @foreach ($internetPlans as $id => $name)
-                        <option value="{{ $id }}">
-                            {{ $name }}
+                    @foreach ($internetPlans as $internetPlan)
+                        <option value="{{ $internetPlan['id'] }}">
+                            {{ $internetPlan['name'] }}
                         </option>
                     @endforeach
 
@@ -329,15 +334,24 @@
 
         @if ($modalMode === 'router-settings')
             <div class="px-1 lg:px-6 space-y-3 text-sm">
-
                 <x-form.select name="router_id" label="Router" wire:model="router_id">
-                    <option value="">
-                        Select Router
-                    </option>
+                    <option value="">Select Router</option>
+                    @foreach ($routers as $id => $name)
+                        <option value="{{ $id }}">{{ $name }}</option>
+                    @endforeach
                 </x-form.select>
-                <x-form.input-group type="text" name="username" wire:model="username" />
-                <x-form.input-group type="password" name="password" wire:model="password" />
 
+                @if ($currentServiceType === 'pppoe')
+                    <x-form.input-group type="text" name="username" label="PPPoE Username"
+                        wire:model="username" />
+                    <x-form.input-group type="text" name="password" label="PPPoE Password"
+                        wire:model="password" />
+                @endif
+
+                @if (in_array($currentServiceType, ['static', 'dedicated']))
+                    <x-form.input-group type="text" name="ip_address" label="IP Address"
+                        wire:model="ip_address" />
+                @endif
             </div>
         @endif
 
